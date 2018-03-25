@@ -1,0 +1,25 @@
+{
+  "CN": "{{ kube_scheduler_cn }}",
+  "hosts": [
+{% for item in groups['k8s-master'] %}
+{% if not loop.last %}
+    "{{ hostvars[item]['access_ip'] | default(hostvars[item]['ip'] | default(hostvars[item]['ansible_default_ipv4']['address']))}}",
+{% else %}
+    "{{ hostvars[item]['access_ip'] | default(hostvars[item]['ip'] | default(hostvars[item]['ansible_default_ipv4']['address']))}}"
+{% endif %}
+{% endfor %}
+  ],
+  "key": {
+    "algo": "{{ kube_scheduler_key_algo }}",
+    "size": {{ kube_scheduler_key_size }}
+  },
+  "names": [
+    {
+      "C": "{{ kube_scheduler_name_c }}",
+      "ST": "{{ kube_scheduler_name_st }}",
+      "L": "{{ kube_scheduler_name_l }}",
+      "O": "{{ kube_scheduler_name_o }}",
+      "OU": "{{ kube_scheduler_name_ou }}"
+    }
+  ]
+}

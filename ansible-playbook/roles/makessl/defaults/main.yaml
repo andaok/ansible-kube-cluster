@@ -1,0 +1,83 @@
+# global variable
+country: "CN"
+city: "Wuhan"
+state: "Hubei"
+algo: "rsa"
+size: 2048
+local_release_dir: "/tmp/release"
+certs_dir: "{{ local_release_dir }}/certs"
+kube_proxy_enabled: false
+token_account: kubelet-bootstrap
+
+# ca config json
+ca_expiry: "87600h"
+# ca csr json
+ca_cn: "kubernetes"
+ca_key_algo: "{{ algo }}"
+ca_key_size: "{{ size }}"
+ca_name_c: "{{ country }}"
+ca_name_l: "{{ city }}"
+ca_name_st: "{{ state }}"
+ca_name_o: "k8s"
+ca_name_ou: "System"
+
+# etcd csr json
+etcd_cn: "etcd"
+etcd_key_algo: "{{ algo }}"
+etcd_key_size: "{{ size }}"
+etcd_name_c: "{{ country }}"
+etcd_name_l: "{{ city }}"
+etcd_name_st: "{{ state}}"
+etcd_name_o: "k8s"
+etcd_name_ou: "System"
+
+# kubernetes apiserver csr json
+service_cluster_ip: "10.254.0.1"
+kube_apiserver_cn: "kubernetes"
+kube_apiserver_key_algo: "{{ algo }}"
+kube_apiserver_key_size: "{{ size }}"
+kube_apiserver_name_c: "{{ country }}"
+kube_apiserver_name_l: "{{ city }}"
+kube_apiserver_name_st: "{{ state }}"
+kube_apiserver_name_o: "k8s"
+kube_apiserver_name_ou: "System"
+
+# kubernetes controller manager csr json
+kube_controller_manager_cn: "system:kube-controller-manager"
+kube_controller_manager_key_algo: "{{ algo }}"
+kube_controller_manager_key_size: "{{ size }}"
+kube_controller_manager_name_c: "{{ country }}"
+kube_controller_manager_name_l: "{{ city }}"
+kube_controller_manager_name_st: "{{ state }}"
+kube_controller_manager_name_o: "system:kube-controller-manager"
+kube_controller_manager_name_ou: "System"
+
+# kubernetes scheduler csr json
+kube_scheduler_cn: "system:kube-scheduler"
+kube_scheduler_key_algo: "{{ algo }}"
+kube_scheduler_key_size: "{{ size }}"
+kube_scheduler_name_c: "{{ country }}"
+kube_scheduler_name_l: "{{ city }}"
+kube_scheduler_name_st: "{{ state }}"
+kube_scheduler_name_o: "system:kube-scheduler"
+kube_scheduler_name_ou: "System"
+
+# kubernetes admin csr json
+kube_admin_cn: "kube-admin"
+kube_admin_key_algo: "{{ algo }}"
+kube_admin_key_size: "{{ size }}"
+kube_admin_name_c: "{{ country }}"
+kube_admin_name_l: "{{ city }}"
+kube_admin_name_st: "{{ state }}"
+kube_admin_name_o: "system:masters"
+kube_admin_name_ou: "System"
+
+# kubernetes proxy csr json
+kube_proxy_cn: "system:kube-proxy"
+kube_proxy_key_algo: "{{ algo }}"
+kube_proxy_key_size: "{{ size }}"
+kube_proxy_name_c: "{{ country }}"
+kube_proxy_name_l: "{{ city }}"
+kube_proxy_name_st: "{{ state }}"
+kube_proxy_name_o: "system:kube-proxy"
+kube_proxy_name_ou: "System"

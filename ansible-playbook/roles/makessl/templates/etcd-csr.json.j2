@@ -1,0 +1,26 @@
+{
+  "CN": "{{etcd_cn}}",
+  "hosts": [
+    "127.0.0.1",
+{% for item in groups['etcd'] %}
+{% if not loop.last %}
+    "{{ hostvars[item]['access_ip'] | default(hostvars[item]['ip'] | default(hostvars[item]['ansible_default_ipv4']['address']))}}",
+{% else %}
+    "{{ hostvars[item]['access_ip'] | default(hostvars[item]['ip'] | default(hostvars[item]['ansible_default_ipv4']['address']))}}"
+{% endif %}
+{% endfor %}
+  ],
+  "key": {
+    "algo": "{{etcd_key_algo}}",
+    "size": {{etcd_key_size}}
+  },
+  "names": [
+    {
+      "C": "{{etcd_name_c}}",
+      "ST": "{{etcd_name_st}}",
+      "L": "{{etcd_name_l}}",
+      "O": "{{etcd_name_o}}",
+      "OU": "{{etcd_name_ou}}"
+    }
+  ]
+}

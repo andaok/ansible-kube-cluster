@@ -1,0 +1,12 @@
+---
+- name: Gen_tokens | copy tokens generation script
+  copy:
+    src: "kube-gen-token.sh"
+    dest: "{{ certs_dir }}/kube-gen-token.sh"
+    mode: 0700
+
+- name: Gen_tokens | generate tokens on k8sconsole
+  command: "{{ certs_dir }}/kube-gen-token.sh {{ token_account }}"
+  environment:
+    TOKEN_DIR: "{{ certs_dir }}"
+  run_once: yes

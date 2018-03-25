@@ -1,0 +1,26 @@
+- hosts: all
+  remote_user: vagrant
+  become: yes
+  roles:
+    - preinstall
+
+- hosts: local
+  remote_user: vagrant
+  become: yes
+  roles:
+    - download
+    - makessl
+
+- hosts: k8s-master
+  remote_user: vagrant
+  become: yes
+  roles:
+    - master
+    - etcd
+
+- hosts: k8s-node
+  remote_user: vagrant
+  become: yes
+  roles:
+    - node
+    - docker

@@ -1,0 +1,25 @@
+{
+  "CN": "{{ kube_controller_manager_cn }}",
+  "hosts": [
+{% for item in groups['k8s-master'] %}
+{% if not loop.last %}
+    "{{ hostvars[item]['access_ip'] | default(hostvars[item]['ip'] | default(hostvars[item]['ansible_default_ipv4']['address']))}}",
+{% else %}
+    "{{ hostvars[item]['access_ip'] | default(hostvars[item]['ip'] | default(hostvars[item]['ansible_default_ipv4']['address']))}}"
+{% endif %}
+{% endfor %}
+  ],
+  "key": {
+    "algo": "{{ kube_controller_manager_key_algo }}",
+    "size": {{ kube_controller_manager_key_size }}
+  },
+  "names": [
+    {
+      "C": "{{ kube_controller_manager_name_c }}",
+      "ST": "{{ kube_controller_manager_name_st }}",
+      "L": "{{ kube_controller_manager_name_l }}",
+      "O": "{{ kube_controller_manager_name_o }}",
+      "OU": "{{ kube_controller_manager_name_ou }}"
+    }
+  ]
+}

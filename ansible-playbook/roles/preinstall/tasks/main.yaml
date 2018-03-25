@@ -1,0 +1,53 @@
+- name: Make sure firewalld stopped
+  systemd:
+    name: firewalld
+    state: stopped
+
+- name : Make sure selinux disabled
+  selinux:
+    state: disabled
+
+- name: Build etc hosts
+  blockinfile:
+    dest: /etc/hosts
+    block: |-
+      {% for item in (groups['k8s-master'] + groups['etcd'] + groups['k8s-node']|default([]))|unique -%}{{ hostvars[item]['access_ip'] | default(hostvars[item]['ip'] | default(hostvars[item]['ansible_default_ipv4']['address'])) }}{% if (item != hostvars[item]['ansible_hostname']) %} {{ hostvars[item]['ansible_hostname'] }} {% endif %} {{ item }}
+      {% endfor %}
+    state: present
+    create: yes
+    backup: yes
+
+- name: update all packages
+  yum:
+    name: '*'
+    state: latest
+
+- name: install ntpd
+  yum:
+    name: ntpd
+    state: latest
+
+- name: Make sure ntpd started
+  systemd:
+    name: ntpd
+    state: started
+    enable: yes
+
+- name: Add etcd user
+  user:
+    name: etcd
+    home: /var/lib/etcd
+    comment: "Etcd user"
+    system: yes
+    shell: /sbin/nologin
+    state: present
+  when: ansible_hostname in groups['etcd']
+
+- name: Add kube user
+  user:
+    name: kube
+    createhome: no
+    comment: "kubernetes user"
+    system: yes
+    shell: /sbin/nologin
+    state: present

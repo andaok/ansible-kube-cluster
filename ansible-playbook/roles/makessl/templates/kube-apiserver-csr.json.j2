@@ -1,0 +1,33 @@
+{
+  "CN": "{{ kube_apiserver_cn }}",
+  "hosts": [
+    "127.0.0.1",
+    "{{ service_cluster_ip }}",
+    "localhost",
+    "kubernetes",
+    "kubernetes.default",
+    "kubernetes.default.svc",
+    "kubernetes.default.svc.cluster",
+    "kubernetes.default.svc.cluster.local",
+{% for item in groups['k8s-master'] %}
+{% if not loop.last %}
+    "{{ hostvars[item]['access_ip'] | default(hostvars[item]['ip'] | default(hostvars[item]['ansible_default_ipv4']['address']))}}",
+{% else %}
+    "{{ hostvars[item]['access_ip'] | default(hostvars[item]['ip'] | default(hostvars[item]['ansible_default_ipv4']['address']))}}"
+{% endif %}
+{% endfor %}
+  ],
+  "key": {
+    "algo": "{{ kube_apiserver_key_algo }}",
+    "size": {{ kube_apiserver_key_size }}
+  },
+  "names": [
+    {
+      "C": "{{ kube_apiserver_name_c }}",
+      "ST": "{{ kube_apiserver_name_st }}",
+      "L": "{{ kube_apiserver_name_l }}",
+      "O": "{{ kube_apiserver_name_o }}",
+      "OU": "{{ kube_apiserver_name_ou }}"
+    }
+  ]
+}

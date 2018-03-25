@@ -1,0 +1,8 @@
+---
+- name: File_download | Download items
+  include_tasks: "download_{% if download.container %}container{% else %}file{% endif %}.yaml"
+  vars:
+    download: "{{ download_defaults | combine(item.value) }}"
+  with_dict: "{{ downloads }}"
+  when:
+    - item.value.enabled
