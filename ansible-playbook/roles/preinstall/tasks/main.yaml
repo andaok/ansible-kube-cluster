@@ -11,7 +11,7 @@
   blockinfile:
     dest: /etc/hosts
     block: |-
-      {% for item in (groups['k8s-master'] + groups['etcd'] + groups['k8s-node']|default([]))|unique -%}{{ hostvars[item]['access_ip'] | default(hostvars[item]['ip'] | default(hostvars[item]['ansible_default_ipv4']['address'])) }}{% if (item != hostvars[item]['ansible_hostname']) %} {{ hostvars[item]['ansible_hostname'] }} {% endif %} {{ item }}
+      {% for item in (groups['k8s-master'] + groups['etcd'] + groups['k8s-node'] + groups['k8s-console']|default([]))|unique -%}{{ hostvars[item]['access_ip'] | default(hostvars[item]['ip'] | default(hostvars[item]['ansible_default_ipv4']['address'])) }}{% if (item != hostvars[item]['ansible_hostname']) %} {{ hostvars[item]['ansible_hostname'] }} {% endif %} {{ item }}
       {% endfor %}
     state: present
     create: yes
