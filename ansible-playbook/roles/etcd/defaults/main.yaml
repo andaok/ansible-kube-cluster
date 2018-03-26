@@ -1,0 +1,18 @@
+etcd_version: v3.3.2
+local_release_dir: "/tmp/release"
+certs_dir: "{{ local_release_dir }}/certs"
+etcd_binary_dir: "{{ local_release_dir }}/etcd-{{ etcd_version }}-linux-amd64"
+etcd_certs_dir: "/etc/etcd/ssl"
+etcd_token: "k8s_etcd"
+etcd_user: "etcd"
+etcd_data_dir: "/var/lib/etcd"
+etcd_bin_dir: "/usr/local/bin"
+etcd_name: |-
+  {% for host in groups['etcd'] %}
+  {%   if inventory_hostname == host %}{{"etcd"+loop.index|string }}{% endif %}
+  {% endfor %}
+etcd_ip: "{{ hostvars[inventory_hostname]['access_ip'] | default(hostvars[inventory_hostname]['ip'] | default(hostvars[inventory_hostname]['ansible_default_ipv4']['address'])) }}"
+etcd_initial_cluster: |-
+  {% for item in groups['etcd'] -%}
+    {{ "etcd"+loop.index|string }}=https://{{ hostvars[item].access_ip | default(hostvars[item].ip | default(hostvars[item].ansible_default_ipv4['address'])) }}:2380{% if not loop.last %},{% endif %}
+  {%- endfor %}

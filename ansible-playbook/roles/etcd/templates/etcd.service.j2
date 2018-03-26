@@ -1,0 +1,32 @@
+[Unit]
+Description=etcd server
+After=network.target
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=notify
+User={{ etcd_user }}
+WorkingDirectory={{ etcd_data_dir }}
+EnvironmentFile=-/etc/etcd/etcd.conf
+ExecStart={{ etcd_bin_dir }}/etcd \
+  --name {{ etcd_name }} \
+  --cert-file={{ etcd_certs_dir }}/etcd.pem \
+  --key-file={{ etcd_certs_dir }}/etcd-key.pem \
+  --peer-cert-file={{ etcd_certs_dir }}/etcd.pem \
+  --peer-key-file={{ etcd_certs_dir }}/etcd-key.pem \
+  --trusted-ca-file={{ etcd_certs_dir }}/ca.pem \
+  --peer-trusted-ca-file={{ etcd_certs_dir }}/ca.pem \
+  --initial-advertise-peer-urls https://{{ etcd_ip }}:2380 \
+  --listen-peer-urls https://{{ etcd_ip }}:2380 \
+  --listen-client-urls https://{{ etcd_ip }}:2379,https://127.0.0.1:2379 \
+  --advertise-client-urls https://{{ etcd_ip }}:2379 \
+  --initial-cluster-token {{ etcd_token }} \
+  --initial-cluster  {{ etcd_initial_cluster }} \
+  --initial-cluster-state new \
+  --data-dir={{ etcd_data_dir }}
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

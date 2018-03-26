@@ -24,14 +24,14 @@
 
 - name: install ntpd
   yum:
-    name: ntpd
+    name: ntp
     state: latest
 
 - name: Make sure ntpd started
   systemd:
     name: ntpd
     state: started
-    enable: yes
+    enabled: yes
 
 - name: Add etcd user
   user:

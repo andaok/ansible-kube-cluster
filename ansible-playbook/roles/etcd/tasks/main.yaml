@@ -1,0 +1,49 @@
+- name: Create etcd certs dir
+  file:
+    path: "{{ etcd_certs_dir }}"
+    state: directory
+    recurse: yes
+    owner: "{{ etcd_user }}"
+    group: "{{ etcd_user }}"
+    mode: 0755
+
+- name: sync etcd certs to etcd node
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - { src: "{{ certs_dir }}/ca.pem", dest: "{{ etcd_certs_dir }}/" }
+    - { src: "{{ certs_dir }}/ca-key.pem", dest: "{{ etcd_certs_dir }}/" }
+    - { src: "{{ certs_dir }}/etcd.pem", dest: "{{ etcd_certs_dir }}/" }
+    - { src: "{{ certs_dir }}/etcd-key.pem", dest: "{{ etcd_certs_dir }}/" }
+
+- name: sync etcd binary file
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: 0755
+  with_items:
+    - { src: "{{ etcd_binary_dir }}/etcd", dest: "{{ etcd_bin_dir }}/" }
+
+- name: install etcd.service systemd unit
+  with_items:
+    - f: etcd.service
+      d: /usr/lib/systemd/system
+  template:
+    src: "{{item.f}}.j2"
+    dest: "{{item.d}}/{{item.f}}"
+    mode: 0644
+  notify:
+    - reload systemd
+
+- name: make sure etcd running
+  systemd:
+    name: etcd
+    state: started
+    enabled: yes
+
+- name: systemctl daemon-reload
+  systemd:
+    name: etcd
+    state: restarted
+    daemon_reload: yes

@@ -12,7 +12,7 @@ k8sconsole
 [k8s-console]
 k8sconsole
 
-[k8-smaster]
+[k8s-master]
 k8smaster1
 k8smaster2
 k8smaster3
