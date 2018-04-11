@@ -32,7 +32,7 @@ etcd_name_o: "k8s"
 etcd_name_ou: "System"
 
 # kubernetes apiserver csr json
-service_cluster_ip: "10.254.0.1"
+kube_service_cluster_ip: "10.254.0.1"
 kube_apiserver_cn: "kubernetes"
 kube_apiserver_key_algo: "{{ algo }}"
 kube_apiserver_key_size: "{{ size }}"

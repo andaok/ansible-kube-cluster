@@ -4,12 +4,12 @@ After=network.target
 After=kube-apiserver.service
 
 [Service]
-EnvironmentFile=-/etc/kubernetes/scheduler
-ExecStart=/usr/local/bin/kube-scheduler \
+#EnvironmentFile=-/etc/kubernetes/scheduler
+ExecStart={{ kube_bin_dir }}/kube-scheduler \
       --address=127.0.0.1 \
 	    --logtostderr=true \
-	    --v=2 \
-	    --master=127.0.0.1:8080 \
+	    --v={{ kube_log_level }} \
+	    --master=http://127.0.0.1:8080 \
 	    --leader-elect=true
 Restart=on-failure
 Type=simple

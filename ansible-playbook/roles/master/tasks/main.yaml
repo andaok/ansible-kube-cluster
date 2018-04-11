@@ -1,0 +1,93 @@
+- name: Create kube require dir
+  file:
+    path: "{{ item }}"
+    state: directory
+    recurse: yes
+    owner: "{{ kube_user }}"
+    group: "{{ kube_user }}"
+    mode: 0755
+  with_items:
+    - "{{ kube_certs_dir }}"
+    - "{{ kube_token_dir }}"
+    - "{{ kube_audit_log_path }}"
+
+- name: sync kube master certs and token file and etcd certs to master node
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - { src: "{{ certs_dir }}/ca.pem", dest: "{{ kube_certs_dir }}/" }
+    - { src: "{{ certs_dir }}/ca-key.pem", dest: "{{ kube_certs_dir }}/" }
+    - { src: "{{ certs_dir }}/kube-apiserver.pem", dest: "{{ kube_certs_dir }}/" }
+    - { src: "{{ certs_dir }}/kube-apiserver-key.pem", dest: "{{ kube_certs_dir }}/" }
+    - { src: "{{ certs_dir }}/kube-controller-manager-key.pem", dest: "{{ kube_certs_dir }}/" }
+    - { src: "{{ certs_dir }}/kube-controller-manager.pem", dest: "{{ kube_certs_dir }}/" }
+    - { src: "{{ certs_dir }}/kube-scheduler-key.pem", dest: "{{ kube_certs_dir }}/" }
+    - { src: "{{ certs_dir }}/kube-scheduler.pem", dest: "{{ kube_certs_dir }}/" }
+    - { src: "{{ certs_dir }}/etcd.pem", dest: "{{ kube_certs_dir }}/" }
+    - { src: "{{ certs_dir }}/etcd-key.pem", dest: "{{ kube_certs_dir }}/" }
+    - { src: "{{ certs_dir }}/token.csv", dest: "{{ kube_token_dir }}/" }
+
+- name: sync kube master binary file
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: 0755
+  with_items:
+    - { src: "{{ kube_binary_dir }}/kube-apiserver", dest: "{{ kube_bin_dir }}/" }
+    - { src: "{{ kube_binary_dir }}/kube-controller-manager", dest: "{{ kube_bin_dir }}/" }
+    - { src: "{{ kube_binary_dir }}/kube-scheduler", dest: "{{ kube_bin_dir }}/" }
+
+
+- name: install kube-apiserver.service systemd unit
+  with_items:
+    - ap: kube-apiserver.service
+      d: /usr/lib/systemd/system
+  template:
+    src: "{{ item.ap }}.j2"
+    dest: "{{ item.d }}/{{ item.ap }}"
+    mode: 0644
+  notify:
+    - reload systemd
+
+- name: install kube-controller-manager.service systemd unit
+  with_items:
+    - cm: kube-controller-manager.service
+      d: /usr/lib/systemd/system
+  template:
+    src: "{{ item.cm }}.j2"
+    dest: "{{ item.d }}/{{ item.cm }}"
+    mode: 0644
+  notify:
+    - reload systemd
+
+- name: install kube-scheduler.service systemd unit
+  with_items:
+    - sc: kube-scheduler.service
+      d: /usr/lib/systemd/system
+  template:
+    src: "{{ item.sc }}.j2"
+    dest: "{{ item.d }}/{{ item.sc }}"
+    mode: 0644
+  notify:
+    - reload systemd
+
+- name: make sure master service  running
+  systemd:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+  with_items:
+    - kube-apiserver
+    - kube-controller-manager
+    - kube-scheduler
+
+- name: systemctl daemon-reload
+  systemd:
+    name: "{{ item }}"
+    state: restarted
+    daemon_reload: yes
+  with_items:
+    - kube-apiserver
+    - kube-controller-manager
+    - kube-scheduler
