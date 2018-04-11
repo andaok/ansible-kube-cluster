@@ -21,7 +21,7 @@
     - { src: "{{ docker_binary_dir }}/docker-init", dest: "{{ docker_bin_dir }}/" }
     - { src: "{{ docker_binary_dir }}/docker-proxy", dest: "{{ docker_bin_dir }}/" }
     - { src: "{{ docker_binary_dir }}/docker-runc", dest: "{{ docker_bin_dir }}/" }
-    - { src: " {{ local_release_dir }}/docker_compose", dest: "{{ docker_bin_dir}}/" }
+    - { src: " {{ local_release_dir }}/docker-compose", dest: "{{ docker_bin_dir}}/" }
 
 - name: sync docker daemon.json file
   template:
