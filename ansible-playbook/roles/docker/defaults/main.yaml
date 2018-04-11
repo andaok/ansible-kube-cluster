@@ -1,4 +1,5 @@
 local_release_dir: "/tmp/release"
-docker_data_root: "/data01/docker"
 docker_binary_dir: "{{ local_release_dir }}/docker"
 docker_bin_dir: /usr/bin
+docker_daemonjson_dir: "/etc/docker"
+docker_data_root: "/data01/docker"
