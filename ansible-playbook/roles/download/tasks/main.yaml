@@ -5,4 +5,5 @@
     download: "{{ download_defaults | combine(item.value) }}"
   with_dict: "{{ downloads }}"
   when:
+    - not skip_downloads|default(false)
     - item.value.enabled

@@ -1,0 +1,43 @@
+- name: sync docker binary file
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: 0755
+  with_items:
+    - { src: "{{ docker_binary_dir }}/docker", dest: "{{ docker_bin_dir }}/" }
+    - { src: "{{ docker_binary_dir }}/dockerd", dest: "{{ docker_bin_dir }}/" }
+    - { src: "{{ docker_binary_dir }}/docker-containerd", dest: "{{ docker_bin_dir }}/" }
+    - { src: "{{ docker_binary_dir }}/docker-containerd-ctr", dest: "{{ docker_bin_dir }}/" }
+    - { src: "{{ docker_binary_dir }}/docker-containerd-shim", dest: "{{ docker_bin_dir }}/" }
+    - { src: "{{ docker_binary_dir }}/docker-int", dest: "{{ docker_bin_dir }}/" }
+    - { src: "{{ docker_binary_dir }}/docker-proxy", dest: "{{ docker_bin_dir }}/" }
+    - { src: "{{ docker_binary_dir }}/docker-runc", dest: "{{ docker_bin_dir }}/" }
+
+- name: sync docker daemon.json file
+  template:
+    src: daemon.json.j2
+    dest: /etc/docker/daemon.json
+    mode: 0644
+
+- name: install docker.service systemd unit
+  with_items:
+    - f: docker.service
+      d: /usr/lib/systemd/system
+  template:
+    src: "{{item.f}}.j2"
+    dest: "{{item.d}}/{{item.f}}"
+    mode: 0644
+  notify:
+    - reload systemd
+
+- name: make sure docker running
+  systemd:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: systemctl daemon-reload
+  systemd:
+    name: docker
+    state: restarted
+    daemon_reload: yes

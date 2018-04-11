@@ -1,41 +1,41 @@
 - name: Generate CA certificate
-  shell: "cfssl gencert --initca csr.json | cfssljson -bare ca"
+  shell: "{{ local_release_dir }}/cfssl gencert --initca csr.json | {{ local_release_dir }}/cfssljson -bare ca"
   args:
     chdir: "{{ certs_dir }}"
     creates: "{{ certs_dir }}/ca*.pem"
 
 - name: Generate etcd certificate
-  shell: "cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=config.json -profile=kubernetes etcd-csr.json | cfssljson -bare etcd"
+  shell: "{{ local_release_dir }}/cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=config.json -profile=kubernetes etcd-csr.json | {{ local_release_dir }}/cfssljson -bare etcd"
   args:
     chdir: "{{ certs_dir }}"
     creates: "{{ certs_dir }}/etcd*.pem"
 
 - name: Generate kubernetes apiserver certificate
-  shell: "cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=config.json -profile=kubernetes kube-apiserver-csr.json | cfssljson -bare kube-apiserver"
+  shell: "{{ local_release_dir }}/cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=config.json -profile=kubernetes kube-apiserver-csr.json | {{ local_release_dir }}/cfssljson -bare kube-apiserver"
   args:
     chdir: "{{ certs_dir }}"
     creates: "{{ certs_dir }}/kube-apiserver*.pem"
 
 - name: Generate kubernetes controller manager certificate
-  shell: "cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=config.json -profile=kubernetes kube-controller-manager-csr.json | cfssljson -bare kube-controller-manager"
+  shell: "{{ local_release_dir }}/cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=config.json -profile=kubernetes kube-controller-manager-csr.json | {{ local_release_dir }}/cfssljson -bare kube-controller-manager"
   args:
     chdir: "{{ certs_dir }}"
     creates: "{{ certs_dir }}/kube-controller-manager*.pem"
 
 - name: Generate kubernetes scheduler certificate
-  shell: "cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=config.json -profile=kubernetes kube-scheduler-csr.json | cfssljson -bare kube-scheduler"
+  shell: "{{ local_release_dir }}/cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=config.json -profile=kubernetes kube-scheduler-csr.json | {{ local_release_dir }}/cfssljson -bare kube-scheduler"
   args:
     chdir: "{{ certs_dir }}"
     creates: "{{ certs_dir }}/kube-scheduler*.pem"
 
 - name: Generate kube cluster admin certificate
-  shell: "cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=config.json -profile=kubernetes kube-admin-csr.json | cfssljson -bare kube-admin"
+  shell: "{{ local_release_dir }}/cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=config.json -profile=kubernetes kube-admin-csr.json | {{ local_release_dir }}/cfssljson -bare kube-admin"
   args:
     chdir: "{{ certs_dir }}"
     creates: "{{ certs_dir }}/kube-admin*.pem"
 
 - name: Generate kubernetes proxy certificate
-  shell: "cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=config.json -profile=kubernetes kube-proxy-csr.json | cfssljson -bare kube-proxy"
+  shell: "{{ local_release_dir }}/cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=config.json -profile=kubernetes kube-proxy-csr.json | {{ local_release_dir }}/cfssljson -bare kube-proxy"
   args:
     chdir: "{{ certs_dir }}"
     creates: "{{ certs_dir }}/kube-proxy*.pem"

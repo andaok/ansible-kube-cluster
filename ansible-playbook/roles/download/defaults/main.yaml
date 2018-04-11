@@ -1,15 +1,18 @@
 ---
+skip_downloads: false
 local_release_dir: /tmp/release
 retry_stagger: 5
 
 # download version
 etcd_version: v3.3.2
 kube_version: v1.9.6
+docker_version: 18.03.0
 
 # download urls
 cfssl_url: https://pkg.cfssl.org/R1.2/cfssl_linux-amd64
 cfssljson_url: https://pkg.cfssl.org/R1.2/cfssljson_linux-amd64
 
+docker_download_url: https://download.docker.com/linux/static/stable/x86_64/docker-{{ docker_version }}-ce.tgz
 etcd_download_url: https://github.com/coreos/etcd/releases/download/{{ etcd_version }}/etcd-{{ etcd_version }}-linux-amd64.tar.gz
 kube_client_url: https://dl.k8s.io/{{kube_version}}/kubernetes-client-linux-amd64.tar.gz
 kube_server_url: https://dl.k8s.io/{{kube_version}}/kubernetes-server-linux-amd64.tar.gz
@@ -63,6 +66,16 @@ downloads:
     version: "{{ etcd_version }}"
     dest: "etcd.tar.gz"
     url: "{{ etcd_download_url }}"
+    unarchive: true
+    owner: "root"
+    mode: "0755"
+
+  docker:
+    enabled: true
+    file: true
+    version: "{{ docker_version }}"
+    dest: "docker.tar.gz"
+    url: "{{ docker_download_url }}"
     unarchive: true
     owner: "root"
     mode: "0755"
