@@ -1,0 +1,7 @@
+local_release_dir: "/tmp/release"
+certs_dir: "{{ local_release_dir }}/certs"
+kube_bin_dir: "/usr/local/bin"
+cluster_name: "kubernetes"
+loadbalancer_apiserver:
+  address: 127.0.0.1
+  port: 6443

@@ -1,0 +1,35 @@
+- name: gather certs for admin kubeconfig
+  slurp:
+    src: "{{ item }}"
+  register: admin_certs
+  with_items:
+    - "{{ certs_dir }}/ca.pem"
+    - "{{ certs_dir }}/kube-admin.pem"
+    - "{{ certs_dir }}/kube-admin-key.pem"
+
+- name: write admin kubeconfig
+  template:
+    src: admin.conf.j2
+    dest: "{{ certs_dir }}/admin.conf"
+    owner: root
+    mode: 0640
+
+- name: create kube config dir
+  file:
+    path: "/root/.kube"
+    mode: 0700
+    state: directory
+
+- name: copy admin kubeconfig to root user home
+  copy:
+    src: "{{ certs_dir }}/admin.conf"
+    dest: "/root/.kube/config"
+    remote_src: yes
+    mode: 0700
+    backup: yes
+
+- name: copy kubectl binary to console host
+  copy:
+    src: "{{ local_release_dir }}/kubernetes/node/bin/kubectl"
+    dest: "{{ kube_bin_dir }}/kubectl"
+    mode: 0755

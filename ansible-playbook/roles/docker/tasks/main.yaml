@@ -40,14 +40,14 @@
   notify:
     - reload systemd
 
-- name: make sure docker running
-  systemd:
-    name: docker
-    state: started
-    enabled: yes
-
 - name: systemctl daemon-reload
   systemd:
     name: docker
     state: restarted
     daemon_reload: yes
+
+- name: make sure docker running
+  systemd:
+    name: docker
+    state: started
+    enabled: yes
