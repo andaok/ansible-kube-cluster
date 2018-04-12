@@ -1,0 +1,5 @@
+nginx_conf_dir: "/etc/nginx"
+docker_bin_dir: "/usr/bin"
+nginx_bind_address: "0.0.0.0"
+nginx_bind_port: 6443
+nginx_expose_port: 6443

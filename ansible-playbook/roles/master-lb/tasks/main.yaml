@@ -1,0 +1,33 @@
+- name: create nginx-proxy require directory
+  file:
+    path: "{{ nginx_conf_dir }}"
+    state: directory
+    recurse: yes
+    owner: "root"
+    group: "root"
+    mode: 0755
+
+- name: nginx.conf present
+  template:
+    src: "nginx.conf.j2"
+    dest: "/etc/nginx/nginx.conf"
+    mode: 0644
+
+- name: install nginx-proxy systemd unit
+  with_items:
+    - f: nginx-proxy.service
+      d: /usr/lib/systemd/system
+  template:
+    src: "{{ item.f }}.j2"
+    dest: "{{ item.d }}/{{ item.f }}"
+    mode: 0644
+  notify:
+    - reload systemd
+
+
+- name: make sure nginx-proxy service running
+  systemd:
+    name: nginx-proxy
+    state: started
+    enabled: yes
+    daemon_reload: yes

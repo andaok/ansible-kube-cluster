@@ -1,0 +1,23 @@
+[Unit]
+Description=kubernetes apiserver docker wrapper
+Wants=docker.socket
+After=docker.service
+
+[Service]
+User=root
+PermissionsStartOnly=true
+ExecStart={{ docker_bin_dir }}/docker run -p {{ nginx_bind_address }}:{{ nginx_bind_port }}:{{ nginx_expose_port }} \
+                              -v {{ nginx_conf_dir }}:{{ nginx_conf_dir }}\
+                              --name nginx-proxy \
+                              --net=host \
+                              --restart=on-failure:5 \
+                              --memory=512M \
+                              nginx:1.13.3-alpine
+ExecStartPre=-{{ docker_bin_dir }}/docker rm -f nginx-proxy
+ExecStop={{ docker_bin_dir }}/docker stop nginx-proxy
+Restart=always
+RestartSec=15s
+TimeoutStartSec=30s
+
+[Install]
+WantedBy=multi-user.target
