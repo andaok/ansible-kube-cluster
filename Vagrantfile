@@ -2,15 +2,15 @@
 # vi: set ft=ruby :
 ENV["LC_ALL"] = "en_US.UTF-8"
 masters = {
-  "k8smaster1" => "192.168.2.10",
-  "k8smaster2" => "192.168.2.20",
-  "k8smaster3" => "192.168.2.30"
+  "k8smaster1" => "192.168.1.10",
+  "k8smaster2" => "192.168.1.20",
+  "k8smaster3" => "192.168.1.30"
 }
 
 nodes = {
-  "k8snode1" => "192.168.2.40",
-  "k8snode2" => "192.168.2.50",
-  "k8sconsole" => "192.168.2.100"
+  "k8snode1" => "192.168.1.40",
+  "k8snode2" => "192.168.1.50",
+  "k8sconsole" => "192.168.1.100"
 }
 
 Vagrant.configure("2") do |config|
