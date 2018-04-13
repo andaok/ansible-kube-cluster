@@ -6,7 +6,7 @@ etcd_certs_dir: "/etc/etcd/ssl"
 etcd_token: "k8s_etcd"
 etcd_user: "etcd"
 etcd_data_dir: "/var/lib/etcd"
-etcd_bin_dir: "/usr/local/bin"
+etcd_bin_dir: "/usr/bin"
 etcd_name: |-
   {% for host in groups['etcd'] %}
   {%   if inventory_hostname == host %}{{"etcd"+loop.index|string }}{% endif %}

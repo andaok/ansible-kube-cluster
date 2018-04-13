@@ -3,7 +3,7 @@ certs_dir: "{{ local_release_dir }}/certs"
 
 kube_user: "kube"
 kube_binary_dir: "{{ local_release_dir }}/kubernetes/server/bin"
-kube_bin_dir: "/usr/local/bin"
+kube_bin_dir: "/usr/bin"
 kube_apiserver_count: "{{ groups['k8s-master'] | length }}"
 kube_service_cluster_ip_range: "10.254.0.0/16"
 kube_pods_subnet: "10.233.0.0/16"

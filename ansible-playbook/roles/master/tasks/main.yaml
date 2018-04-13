@@ -26,7 +26,7 @@
     - { src: "{{ certs_dir }}/kube-scheduler.pem", dest: "{{ kube_certs_dir }}/" }
     - { src: "{{ certs_dir }}/etcd.pem", dest: "{{ kube_certs_dir }}/" }
     - { src: "{{ certs_dir }}/etcd-key.pem", dest: "{{ kube_certs_dir }}/" }
-    - { src: "{{ certs_dir }}/token.csv", dest: "{{ kube_token_dir }}/" }
+    - { src: "{{ certs_dir }}/token.csv", dest: "{{ kube_token_dir }}/token.csv" }
 
 - name: sync kube master binary file
   copy:

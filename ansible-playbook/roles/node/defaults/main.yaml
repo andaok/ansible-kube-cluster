@@ -1,0 +1,19 @@
+local_release_dir: "/tmp/release"
+certs_dir: "{{ local_release_dir }}/certs"
+kube_bin_dir: "/usr/bin"
+loadbalancer_apiserver:
+  address: 127.0.0.1
+  port: 6443
+token_account: kubelet-bootstrap
+token_content: "{{ lookup('pipe','cat {{ certs_dir }}/token.csv|awk -F \",\" '{print $1}').split('\n') }}"
+cluster_name: kubernetes
+
+kube_user: "kube"
+kube_certs_dir: "/etc/kubernetes/ssl"
+kube_cgroup_driver: "systemd"
+kubelet_working_dir: "/var/lib/kubelet"
+kubeproxy_working_dir: "/var/lib/kube-proxy"
+pod_infra_container_image: "gcr.io/google_containers/pause-amd64:3.0"
+kube_cluster_dns: "10.254.0.2"
+kube_cluster_domain: "cluster.local."
+kube_log_level: 2

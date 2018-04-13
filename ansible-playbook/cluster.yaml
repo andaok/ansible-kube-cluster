@@ -10,6 +10,8 @@
   roles:
     - download
     - makessl
+    - master-lb
+    - client
 
 - hosts: k8s-master
   remote_user: vagrant
@@ -24,3 +26,4 @@
   roles:
     - node
     - docker
+    - master-lb

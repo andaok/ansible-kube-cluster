@@ -1,0 +1,61 @@
+- name: gather certs for bootstrap kubeconfig
+  slurp:
+    src: "{{ item }}"
+  register: bootstrap_certs
+  with_items:
+    - "{{ certs_dir }}/ca.pem"
+  delegate_to: "{{ groups['k8s-console'][0]}}"
+
+- name: write bootstrap kubeconfig
+  template:
+    src: bootstrap.kubeconfig.j2
+    dest: "{{ certs_dir }}/bootstrap.kubeconfig"
+    owner: root
+    mode: 0640
+  delegate_to: "{{ groups['k8s-console'][0]}}"
+
+- name: create kube node require dir
+  file:
+    path: "{{ item }}"
+    mode: 0700
+    state: directory
+    recurse: yes
+    owner: "{{ kube_user }}"
+    group: "{{ kube_user }}"
+  with_items:
+    - "{{ kube_certs_dir }}"
+    - "{{ kubelet_working_dir }}"
+
+- name: sync bootstrap.kubeconfig to each node
+  copy:
+    src: "{{ certs_dir }}/bootstrap.kubeconfig"
+    dest: "{{ kube_certs_dir }}"
+
+- name: sync kubelet binary to each node
+  copy:
+    src: "{{ local_release_dir }}/kubernetes/node/bin/kubelet"
+    dest: "{{ kube_bin_dir }}/kubelet"
+    mode: 0755
+
+- name: install kubelet systemd Unit
+  with_items:
+    - f: kubelet.service
+      d: /usr/lib/systemd/system
+  template:
+    src: "{{ item.f }}.j2"
+    dest: "{{ item.d }}/{{ item.f }}"
+    mode: 0644
+  notify:
+    - reload systemd
+
+- name: make sure kubelet service running
+  systemd:
+    name: kubelet
+    state: started
+    enabled: yes
+
+- name: systemctl daemon-reload
+  systemd:
+    name: kubelet
+    state: restarted
+    daemon_reload: yes
