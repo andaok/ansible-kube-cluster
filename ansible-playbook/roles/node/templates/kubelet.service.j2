@@ -20,7 +20,10 @@ ExecStart={{ kube_bin_dir }}/kubelet \
   --allow-privileged=true \
   --serialize-image-pulls=true \
   --max-pods=512 \
-  --v={{ kube_log_level }}
+  --v={{ kube_log_level }} \
+  --network-plugin={{ kube_network_plugin }} \
+  --cni-conf-dir={{ kube_cni_conf_dir }} \
+  --cni-bin-dir= {{ kube_cni_bin_dir }}
 Restart=on-failure
 RestartSec=5
 

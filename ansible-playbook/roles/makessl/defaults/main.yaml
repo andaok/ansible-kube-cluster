@@ -6,6 +6,7 @@ algo: "rsa"
 size: 2048
 local_release_dir: "/tmp/release"
 certs_dir: "{{ local_release_dir }}/certs"
+cfssl_binary_dir: "{{ local_release_dir }}/cfssl"
 kube_proxy_enabled: false
 token_account: kubelet-bootstrap
 

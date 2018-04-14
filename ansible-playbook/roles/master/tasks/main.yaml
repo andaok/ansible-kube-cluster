@@ -34,9 +34,9 @@
     dest: "{{ item.dest }}"
     mode: 0755
   with_items:
-    - { src: "{{ kube_binary_dir }}/kube-apiserver", dest: "{{ kube_bin_dir }}/" }
-    - { src: "{{ kube_binary_dir }}/kube-controller-manager", dest: "{{ kube_bin_dir }}/" }
-    - { src: "{{ kube_binary_dir }}/kube-scheduler", dest: "{{ kube_bin_dir }}/" }
+    - { src: "{{ master_binary_dir }}/kube-apiserver", dest: "{{ kube_bin_dir }}/" }
+    - { src: "{{ master_binary_dir }}/kube-controller-manager", dest: "{{ kube_bin_dir }}/" }
+    - { src: "{{ master_binary_dir }}/kube-scheduler", dest: "{{ kube_bin_dir }}/" }
 
 
 - name: install kube-apiserver.service systemd unit

@@ -1,7 +1,7 @@
 etcd_version: v3.3.2
 local_release_dir: "/tmp/release"
 certs_dir: "{{ local_release_dir }}/certs"
-etcd_binary_dir: "{{ local_release_dir }}/etcd-{{ etcd_version }}-linux-amd64"
+etcd_binary_dir: "{{ local_release_dir }}/etcd/etcd-{{ etcd_version }}-linux-amd64"
 etcd_certs_dir: "/etc/etcd/ssl"
 etcd_token: "k8s_etcd"
 etcd_user: "etcd"

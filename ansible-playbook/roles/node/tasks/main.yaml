@@ -1,10 +1,35 @@
+- name: sync kube cni plugin binary to each node
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - { src: "{{ cni_binary_dir }}/bridge", dest: "{{ kube_cni_bin_dir }}/" }
+    - { src: "{{ cni_binary_dir }}/dhcp", dest: "{{ kube_cni_bin_dir }}/" }
+    - { src: "{{ cni_binary_dir }}/flannel", dest: "{{ kube_cni_bin_dir }}/" }
+    - { src: "{{ cni_binary_dir }}/host-device", dest: "{{ kube_cni_bin_dir }}/" }
+    - { src: "{{ cni_binary_dir }}/host-local", dest: "{{ kube_cni_bin_dir }}/" }
+    - { src: "{{ cni_binary_dir }}/ipvlan", dest: "{{ kube_cni_bin_dir }}/" }
+    - { src: "{{ cni_binary_dir }}/loopback", dest: "{{ kube_cni_bin_dir }}/" }
+    - { src: "{{ cni_binary_dir }}/macvlan", dest: "{{ kube_cni_bin_dir }}/" }
+    - { src: "{{ cni_binary_dir }}/portmap", dest: "{{ kube_cni_bin_dir }}/" }
+    - { src: "{{ cni_binary_dir }}/ptp", dest: "{{ kube_cni_bin_dir }}/" }
+    - { src: "{{ cni_binary_dir }}/sample", dest: "{{ kube_cni_bin_dir }}/" }
+    - { src: "{{ cni_binary_dir }}/tuning", dest: "{{ kube_cni_bin_dir }}/" }
+    - { src: "{{ cni_binary_dir }}/vlan", dest: "{{ kube_cni_bin_dir }}/" }
+
+- name: create kubelet-bootstrap user
+  command: kubectl create clusterrolebinding kubelet-bootstrap --clusterrole=system:node-bootstrapper --user=kubelet-bootstrap
+  ignore_errors: yes
+  delegate_to: "{{ groups['k8s-console'][0] }}"
+  run_once: yes
+
 - name: gather certs for bootstrap kubeconfig
   slurp:
     src: "{{ item }}"
   register: bootstrap_certs
   with_items:
     - "{{ certs_dir }}/ca.pem"
-  delegate_to: "{{ groups['k8s-console'][0]}}"
+  delegate_to: "{{ groups['k8s-console'][0] }}"
 
 - name: write bootstrap kubeconfig
   template:
@@ -12,7 +37,7 @@
     dest: "{{ certs_dir }}/bootstrap.kubeconfig"
     owner: root
     mode: 0640
-  delegate_to: "{{ groups['k8s-console'][0]}}"
+  delegate_to: "{{ groups['k8s-console'][0] }}"
 
 - name: create kube node require dir
   file:
@@ -25,6 +50,9 @@
   with_items:
     - "{{ kube_certs_dir }}"
     - "{{ kubelet_working_dir }}"
+    - "{{ kube_cni_conf_dir }}"
+    - "{{ kube_cni_bin_dir }}"
+    - "{{ kube_proxy_working_dir }}"
 
 - name: sync bootstrap.kubeconfig to each node
   copy:
@@ -33,7 +61,7 @@
 
 - name: sync kubelet binary to each node
   copy:
-    src: "{{ local_release_dir }}/kubernetes/node/bin/kubelet"
+    src: "{{ node_binary_dir }}/kubelet"
     dest: "{{ kube_bin_dir }}/kubelet"
     mode: 0755
 
@@ -59,3 +87,68 @@
     name: kubelet
     state: restarted
     daemon_reload: yes
+
+
+
+# install kube-proxy if kube-proxy is enabled
+
+- name: gather certs for kube proxy
+  slurp:
+    src: "{{ item }}"
+  register: kube_proxy_certs
+  with_items:
+    - "{{ certs_dir }}/ca.pem"
+    - "{{ certs_dir }}/kube-proxy.pem"
+    - "{{ certs_dir }}/kube-proxy-key.pem"
+  delegate_to: "{{ groups['k8s-console'][0] }}"
+  when: kube_proxy_enabled
+
+
+- name: write kube proxy kubeconfig
+  template:
+    src: kube-proxy.kubeconfig.j2
+    dest: "{{ certs_dir }}/kube-proxy.kubeconfig"
+    owner: root
+    mode: 0640
+  delegate_to: "{{ groups['k8s-console'][0] }}"
+  when: kube_proxy_enabled
+
+- name: sync kube-proxy.kubeconfig to each node
+  copy:
+    src: "{{ certs_dir }}/kube-proxy.kubeconfig"
+    dest: "{{ kube_certs_dir }}"
+  when: kube_proxy_enabled
+
+- name: sync kube proxy binary to each node
+  copy:
+    src: "{{ node_binary_dir }}/kube-proxy"
+    dest: "{{ kube_bin_dir }}/kube-proxy"
+    mode: 0755
+  when: kube_proxy_enabled
+
+
+- name: install kube proxy systemd Unit
+  with_items:
+    - f: kube-proxy.service
+      d: /usr/lib/systemd/system
+  template:
+    src: "{{ item.f }}.j2"
+    dest: "{{ item.d }}/{{ item.f }}"
+    mode: 0644
+  notify:
+    - reload systemd
+  when: kube_proxy_enabled
+
+- name: make sure kube proxy service running
+  systemd:
+    name: kube-proxy
+    state: started
+    enabled: yes
+  when: kube_proxy_enabled
+
+- name: systemctl daemon-reload
+  systemd:
+    name: kube-proxy
+    state: restarted
+    daemon_reload: yes
+  when: kube_proxy_enabled

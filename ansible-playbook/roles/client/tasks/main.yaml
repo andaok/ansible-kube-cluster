@@ -30,6 +30,6 @@
 
 - name: copy kubectl binary to console host
   copy:
-    src: "{{ local_release_dir }}/kubernetes/node/bin/kubectl"
+    src: "{{ node_binary_dir }}/kubectl"
     dest: "{{ kube_bin_dir }}/kubectl"
     mode: 0755

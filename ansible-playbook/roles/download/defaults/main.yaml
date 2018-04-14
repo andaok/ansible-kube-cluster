@@ -8,6 +8,7 @@ etcd_version: v3.3.2
 kube_version: v1.9.6
 docker_version: 18.03.0
 docker_compose_version: 1.21.0
+kube_cni_version: v0.7.1
 
 # download urls
 cfssl_url: https://pkg.cfssl.org/R1.2/cfssl_linux-amd64
@@ -19,6 +20,7 @@ etcd_download_url: https://github.com/coreos/etcd/releases/download/{{ etcd_vers
 kube_client_url: https://dl.k8s.io/{{kube_version}}/kubernetes-client-linux-amd64.tar.gz
 kube_server_url: https://dl.k8s.io/{{kube_version}}/kubernetes-server-linux-amd64.tar.gz
 kube_node_url: https://dl.k8s.io/{{kube_version}}/kubernetes-node-linux-amd64.tar.gz
+kube_cni_url: https://github.com/containernetworking/plugins/releases/download/{{ kube_cni_version }}/cni-plugins-amd64-{{kube_cni_version}}.tgz
 
 
 downloads:
@@ -26,7 +28,7 @@ downloads:
     enabled: true
     file: true
     version:
-    dest: "cfssl"
+    dest: "cfssl/cfssl"
     url: "{{ cfssl_url }}"
     unarchive: false
     owner: "root"
@@ -36,7 +38,7 @@ downloads:
     enabled: true
     file: true
     version:
-    dest: "cfssljson"
+    dest: "cfssl/cfssljson"
     url: "{{ cfssljson_url }}"
     unarchive: false
     owner: "root"
@@ -46,7 +48,7 @@ downloads:
     enabled: true
     file: true
     version: "{{kube_version }}"
-    dest: "kubemaster.tar.gz"
+    dest: "kubernetes/kubemaster.tar.gz"
     url: "{{ kube_server_url }}"
     unarchive: true
     owner: "root"
@@ -56,8 +58,18 @@ downloads:
     enabled: true
     file: true
     version: "{{ kube_version }}"
-    dest: "kubenode.tar.gz"
+    dest: "kubenode/kubenode.tar.gz"
     url: "{{ kube_node_url }}"
+    unarchive: true
+    owner: "root"
+    mode: "0755"
+
+  kube_cni:
+    enabled: true
+    file: true
+    version: "{{ kube_cni_version }}"
+    dest: "cni/cni.tar.gz"
+    url: "{{ kube_cni_url }}"
     unarchive: true
     owner: "root"
     mode: "0755"
@@ -66,7 +78,7 @@ downloads:
     enabled: true
     file: true
     version: "{{ etcd_version }}"
-    dest: "etcd.tar.gz"
+    dest: "etcd/etcd.tar.gz"
     url: "{{ etcd_download_url }}"
     unarchive: true
     owner: "root"
@@ -76,7 +88,7 @@ downloads:
     enabled: true
     file: true
     version: "{{ docker_version }}"
-    dest: "docker.tar.gz"
+    dest: "docker/docker.tar.gz"
     url: "{{ docker_download_url }}"
     unarchive: true
     owner: "root"
@@ -86,7 +98,7 @@ downloads:
     enabled: true
     file: true
     version: "{{ docker_compose_version }}"
-    dest: "docker-compose"
+    dest: "docker/docker/docker-compose"
     url: "{{ docker_compose_url }}"
     unarchive: false
     owner: "root"
