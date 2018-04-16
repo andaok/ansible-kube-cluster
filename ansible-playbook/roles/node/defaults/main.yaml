@@ -25,5 +25,6 @@ kube_log_level: 2
 kube_network_plugin: "cni"
 kube_cni_conf_dir: "/etc/cni/net.d"
 kube_cni_bin_dir: "/opt/cni/bin"
+# kubernetes network plugin support calico and kube-router,if kube_proxy_enabled is true use calico ，otherwise kube-router
 kube_proxy_enabled: true
-kube_proxy_mode: "ipvs"
+kube_network_plugin: "calico"

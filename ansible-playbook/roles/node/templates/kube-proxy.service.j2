@@ -10,13 +10,6 @@ ExecStart={{ kube_bin_dir }}/kube-proxy \
   --cluster-cidr={{ kube_service_cluster_ip_range }} \
   --kubeconfig={{ kube_certs_dir }}/kube-proxy.kubeconfig \
   --proxy-mode={{ kube_proxy_mode }} \
-{% if kube_proxy_mode == "ipvs" %}
-  --masquerade-all \
-  --feature-gates=SupportIPVSProxyMode=true \
-  --ipvs-min-sync-period=5s \
-  --ipvs-sync-period=5s \
-  --ipvs-scheduler=rr \
-{% endif %}
   --v={{ kube_log_level }}
 Restart=on-failure
 RestartSec=5

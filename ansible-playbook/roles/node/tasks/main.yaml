@@ -90,7 +90,7 @@
 
 
 
-# install kube-proxy if kube-proxy is enabled
+# install kube-proxy if kube-proxy is enabled and kube_network_plugin is calico
 
 - name: gather certs for kube proxy
   slurp:
@@ -101,7 +101,7 @@
     - "{{ certs_dir }}/kube-proxy.pem"
     - "{{ certs_dir }}/kube-proxy-key.pem"
   delegate_to: "{{ groups['k8s-console'][0] }}"
-  when: kube_proxy_enabled
+  when: (kube_proxy_enabled and kube_network_plugin == "calico")
 
 
 - name: write kube proxy kubeconfig
@@ -111,20 +111,20 @@
     owner: root
     mode: 0640
   delegate_to: "{{ groups['k8s-console'][0] }}"
-  when: kube_proxy_enabled
+  when: (kube_proxy_enabled and kube_network_plugin == "calico")
 
 - name: sync kube-proxy.kubeconfig to each node
   copy:
     src: "{{ certs_dir }}/kube-proxy.kubeconfig"
     dest: "{{ kube_certs_dir }}"
-  when: kube_proxy_enabled
+  when: (kube_proxy_enabled and kube_network_plugin == "calico")
 
 - name: sync kube proxy binary to each node
   copy:
     src: "{{ node_binary_dir }}/kube-proxy"
     dest: "{{ kube_bin_dir }}/kube-proxy"
     mode: 0755
-  when: kube_proxy_enabled
+  when: (kube_proxy_enabled and kube_network_plugin == "calico")
 
 
 - name: install kube proxy systemd Unit
@@ -137,21 +137,21 @@
     mode: 0644
   notify:
     - reload systemd
-  when: kube_proxy_enabled
+  when: (kube_proxy_enabled and kube_network_plugin == "calico")
 
 - name: make sure kube proxy service running
   systemd:
     name: kube-proxy
     state: started
     enabled: yes
-  when: kube_proxy_enabled
+  when: (kube_proxy_enabled and kube_network_plugin == "calico")
 
 - name: systemctl daemon-reload
   systemd:
     name: kube-proxy
     state: restarted
     daemon_reload: yes
-  when: kube_proxy_enabled
+  when: (kube_proxy_enabled and kube_network_plugin == "calico")
 
 
 # install kube-router if kube-router is enabled
