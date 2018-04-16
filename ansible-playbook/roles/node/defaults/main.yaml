@@ -19,10 +19,11 @@ kube_proxy_working_dir: "/var/lib/kube-proxy"
 pod_infra_container_image: "gcr.io/google_containers/pause-amd64:3.0"
 kube_cluster_dns: "10.254.0.2"
 kube_service_cluster_ip_range: "10.254.0.0/16"
+kube_pods_subnet: "10.233.0.0/16"
 kube_cluster_domain: "cluster.local."
 kube_log_level: 2
 kube_network_plugin: "cni"
 kube_cni_conf_dir: "/etc/cni/net.d"
 kube_cni_bin_dir: "/opt/cni/bin"
-kube_proxy_enabled: false
-kube_cni_version: v0.7.1
+kube_proxy_enabled: true
+kube_proxy_mode: "ipvs"

@@ -152,3 +152,6 @@
     state: restarted
     daemon_reload: yes
   when: kube_proxy_enabled
+
+
+# install kube-router if kube-router is enabled
