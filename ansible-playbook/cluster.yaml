@@ -10,20 +10,22 @@
   roles:
     - download
     - makessl
+    - docker
     - master-lb
-    - client
+    - { role: kubernetes/client }
 
 - hosts: k8s-master
   remote_user: vagrant
   become: yes
   roles:
-    - master
     - etcd
+    - { role: kubernetes/master }
+
 
 - hosts: k8s-node
   remote_user: vagrant
   become: yes
   roles:
-    - node
     - docker
     - master-lb
+    - { role: kubernetes/node }

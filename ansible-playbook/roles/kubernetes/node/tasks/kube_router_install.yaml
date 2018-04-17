@@ -1,0 +1,32 @@
+# uninstall kube-proxy if exists
+- name: delete calico network_plugin
+  shell: "kubectl delete -f {{ yaml_dir }}/calico.yaml"
+  delegate_to: "{{ groups['k8s-console'][0] }}"
+  ignore_errors: true
+  run_once: yes
+
+- name: uninstall kube-proxy if exists
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ kube_certs_dir }}/kube-proxy.kubeconfig"
+    - /usr/lib/systemd/system/kube-proxy.service
+    - /etc/cni/net.d
+
+- name: create yaml file require directory
+  file:
+    path: "{{ yaml_dir }}"
+    state: directory
+  delegate_to: "{{ groups['k8s-console'][0] }}"
+
+- name: Generate Deployment YAML
+  template:
+    src: "kube-router.yaml.j2"
+    dest: "{{ yaml_dir }}/kube-router.yaml"
+  delegate_to: "{{ groups['k8s-console'][0] }}"
+
+- name: create kube-router network_plugin
+  shell: "kubectl apply -f {{ yaml_dir }}/kube-router.yaml"
+  delegate_to: "{{ groups['k8s-console'][0] }}"
+  run_once: yes

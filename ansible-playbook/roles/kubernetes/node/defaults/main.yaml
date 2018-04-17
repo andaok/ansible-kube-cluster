@@ -1,0 +1,35 @@
+local_release_dir: "/tmp/release"
+yaml_dir: "{{ local_release_dir }}/yaml"
+certs_dir: "{{ local_release_dir }}/certs"
+node_binary_dir: "{{ local_release_dir }}/kubenode/kubernetes/node/bin"
+cni_binary_dir: "{{ local_release_dir }}/cni"
+kube_bin_dir: "/usr/bin"
+loadbalancer_apiserver:
+  address: 127.0.0.1
+  port: 6443
+token_account: kubelet-bootstrap
+kube_proxy_account: kube-proxy
+token_content: "{{ lookup('pipe','cat {{ certs_dir }}/token.csv|cut -d , -f 1') }}"
+cluster_name: kubernetes
+
+kube_user: "kube"
+kube_certs_dir: "/etc/kubernetes/ssl"
+kube_cgroup_driver: "cgroupfs"
+kubelet_working_dir: "/var/lib/kubelet"
+kube_proxy_working_dir: "/var/lib/kube-proxy"
+pod_infra_container_image: "gcr.io/google_containers/pause-amd64:3.0"
+kube_cluster_dns: "10.254.0.2"
+kube_service_cluster_ip_range: "10.254.0.0/16"
+kube_pods_subnet: "10.233.0.0/16"
+kube_cluster_domain: "cluster.local."
+kube_log_level: 2
+kube_network_plugin: "cni"
+kube_cni_conf_dir: "/etc/cni/net.d"
+kube_cni_bin_dir: "/opt/cni/bin"
+# kubernetes network plugin support calico and kube-router,if kube_proxy_enabled is true use calico ，otherwise kube-router
+kube_proxy_enabled: true
+pod_network_plugin: "calico"
+etcd_endpoints: |-
+  {% for item in groups['etcd'] -%}
+    https://{{ hostvars[item].access_ip | default(hostvars[item].ip | default(hostvars[item].ansible_default_ipv4['address'])) }}:2379{% if not loop.last %},{% endif %}
+  {%- endfor %}

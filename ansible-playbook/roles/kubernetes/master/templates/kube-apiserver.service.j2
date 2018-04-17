@@ -1,0 +1,46 @@
+[Unit]
+Description=Kubernetes API Server
+After=network.target
+After=etcd.service
+
+[Service]
+#EnvironmentFile=-/etc/kubernetes/apiserver
+ExecStart={{ kube_bin_dir }}/kube-apiserver \
+  --admission-control={{ kube_apiserver_admission_control | join(',') }} \
+  --advertise-address={{ ip | default(ansible_default_ipv4.address) }} \
+  --bind-address={{ ip | default(ansible_default_ipv4.address) }} \
+  --insecure-bind-address=127.0.0.1 \
+  --service-cluster-ip-range={{ kube_service_cluster_ip_range }} \
+  --service-node-port-range={{ kube_apiserver_node_port_range }} \
+  --allow-privileged=true \
+  --apiserver-count={{ kube_apiserver_count }} \
+  --logtostderr=true \
+  --v={{ kube_log_level }} \
+  --audit-log-maxage=30 \
+  --audit-log-maxbackup=3 \
+  --audit-log-maxsize=100 \
+  --audit-log-path={{ kube_audit_log_path }} \
+  --authorization-mode={{ authorization_modes|join(',') }} \
+  --enable-swagger-ui=true \
+  --event-ttl=1h \
+  --secure-port={{ kube_apiserver_secure_port }} \
+  --insecure-port={{ kube_apiserver_insecure_port }} \
+  --etcd-servers={{ etcd_endpoints }} \
+  --etcd-cafile={{ kube_certs_dir }}/ca.pem \
+  --etcd-certfile={{ kube_certs_dir }}/etcd.pem \
+  --etcd-keyfile={{ kube_certs_dir }}/etcd-key.pem \
+  --storage-backend=etcd3 \
+  --tls-cert-file={{ kube_certs_dir }}/kube-apiserver.pem \
+  --tls-private-key-file={{ kube_certs_dir }}/kube-apiserver-key.pem \
+  --client-ca-file={{ kube_certs_dir }}/ca.pem \
+  --service-account-key-file={{ kube_certs_dir }}/kube-apiserver-key.pem \
+  --token-auth-file={{ kube_token_dir }}/token.csv \
+  --endpoint-reconciler-type=lease \
+  --kubelet-https=true \
+  --anonymous-auth=False
+Restart=on-failure
+Type=notify
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target

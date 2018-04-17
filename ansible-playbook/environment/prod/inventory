@@ -18,6 +18,10 @@ k8smaster3
 k8snode1
 k8snode2
 
+[k8s-master-lb]
+k8snode1
+k8snode2
+
 [etcd]
 k8smaster1
 k8smaster2
