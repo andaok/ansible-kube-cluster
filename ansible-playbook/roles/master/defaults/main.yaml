@@ -26,7 +26,7 @@ kube_apiserver_admission_control:
   - DefaultTolerationSeconds
   - NodeRestriction
 
-etcd_cluster: |-
+etcd_endpoints: |-
   {% for item in groups['etcd'] -%}
     https://{{ hostvars[item].access_ip | default(hostvars[item].ip | default(hostvars[item].ansible_default_ipv4['address'])) }}:2379{% if not loop.last %},{% endif %}
   {%- endfor %}

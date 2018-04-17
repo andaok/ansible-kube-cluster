@@ -4,7 +4,7 @@
   roles:
     - preinstall
 
-- hosts: local
+- hosts: k8s-console
   remote_user: vagrant
   become: yes
   roles:

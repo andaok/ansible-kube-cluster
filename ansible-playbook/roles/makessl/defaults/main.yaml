@@ -7,7 +7,7 @@ size: 2048
 local_release_dir: "/tmp/release"
 certs_dir: "{{ local_release_dir }}/certs"
 cfssl_binary_dir: "{{ local_release_dir }}/cfssl"
-kube_proxy_enabled: false
+kube_proxy_enabled: true
 token_account: kubelet-bootstrap
 
 # ca config json
@@ -33,7 +33,7 @@ etcd_name_o: "k8s"
 etcd_name_ou: "System"
 
 # kubernetes apiserver csr json
-kube_service_cluster_ip: "10.254.0.1"
+kube_service_cluster_ip: "{{ kube_service_cluster_ip }}"
 kube_apiserver_cn: "kubernetes"
 kube_apiserver_key_algo: "{{ algo }}"
 kube_apiserver_key_size: "{{ size }}"

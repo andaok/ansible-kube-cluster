@@ -13,7 +13,7 @@ metadata:
   namespace: kube-system
 data:
   # Configure this with the location of your etcd cluster.
-  etcd_endpoints: "http://127.0.0.1:2379"
+  etcd_endpoints: "{{ etcd_endpoints }}"
 
   # Configure the Calico backend to use.
   calico_backend: "bird"
@@ -52,9 +52,9 @@ data:
 
   # If you're using TLS enabled etcd uncomment the following.
   # You must also populate the Secret below with these files.
-  etcd_ca: ""   # "/calico-secrets/etcd-ca"
-  etcd_cert: "" # "/calico-secrets/etcd-cert"
-  etcd_key: ""  # "/calico-secrets/etcd-key"
+  etcd_ca: "/calico-secrets/etcd-ca"
+  etcd_cert: "/calico-secrets/etcd-cert"
+  etcd_key: "/calico-secrets/etcd-key"
 
 ---
 
@@ -71,9 +71,9 @@ data:
   # not using TLS for etcd.
   # This self-hosted install expects three files with the following names.  The values
   # should be base64 encoded strings of the entire contents of each file.
-  # etcd-key: null
-  # etcd-cert: null
-  # etcd-ca: null
+  etcd-key: {{ calico_etcd_certs.results[2]['content'] }}
+  etcd-cert: {{ calico_etcd_certs.results[1]['content'] }}
+  etcd-ca: {{ calico_etcd_certs.results[0]['content'] }}
 
 ---
 
@@ -153,7 +153,7 @@ spec:
             # chosen from this range. Changing this value after installation will have
             # no effect. This should fall within `--cluster-cidr`.
             - name: CALICO_IPV4POOL_CIDR
-              value: "192.168.0.0/16"
+              value: "{{ kube_pods_subnet }}"
             - name: CALICO_IPV4POOL_IPIP
               value: "Always"
             # Disable IPv6 on Kubernetes.

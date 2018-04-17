@@ -1,3 +1,4 @@
+# install kubelet
 - name: sync kube cni plugin binary to each node
   copy:
     src: "{{ item.src }}"
@@ -101,7 +102,7 @@
     - "{{ certs_dir }}/kube-proxy.pem"
     - "{{ certs_dir }}/kube-proxy-key.pem"
   delegate_to: "{{ groups['k8s-console'][0] }}"
-  when: (kube_proxy_enabled and kube_network_plugin == "calico")
+  when: kube_proxy_enabled
 
 
 - name: write kube proxy kubeconfig
@@ -111,20 +112,20 @@
     owner: root
     mode: 0640
   delegate_to: "{{ groups['k8s-console'][0] }}"
-  when: (kube_proxy_enabled and kube_network_plugin == "calico")
+  when: kube_proxy_enabled
 
 - name: sync kube-proxy.kubeconfig to each node
   copy:
     src: "{{ certs_dir }}/kube-proxy.kubeconfig"
     dest: "{{ kube_certs_dir }}"
-  when: (kube_proxy_enabled and kube_network_plugin == "calico")
+  when: kube_proxy_enabled
 
 - name: sync kube proxy binary to each node
   copy:
     src: "{{ node_binary_dir }}/kube-proxy"
     dest: "{{ kube_bin_dir }}/kube-proxy"
     mode: 0755
-  when: (kube_proxy_enabled and kube_network_plugin == "calico")
+  when: kube_proxy_enabled
 
 
 - name: install kube proxy systemd Unit
@@ -137,21 +138,27 @@
     mode: 0644
   notify:
     - reload systemd
-  when: (kube_proxy_enabled and kube_network_plugin == "calico")
+  when: kube_proxy_enabled
 
 - name: make sure kube proxy service running
   systemd:
     name: kube-proxy
     state: started
     enabled: yes
-  when: (kube_proxy_enabled and kube_network_plugin == "calico")
+  when: kube_proxy_enabled
 
 - name: systemctl daemon-reload
   systemd:
     name: kube-proxy
     state: restarted
     daemon_reload: yes
-  when: (kube_proxy_enabled and kube_network_plugin == "calico")
+  when: kube_proxy_enabled
 
+# install pod_network_plugin ,default is calico
+- name: install network_plugin | install calico
+  include_tasks: "calico_install.yaml"
+  when: kube_proxy_enabled
 
-# install kube-router if kube-router is enabled
+- name: install network_plugin | install kube-router
+  include_tasks: "kube_router_install.yaml"
+  when: not kube_proxy_enabled

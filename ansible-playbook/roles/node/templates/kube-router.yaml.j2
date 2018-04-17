@@ -20,12 +20,12 @@ data:
   kubeconfig: |
     apiVersion: v1
     kind: Config
-    clusterCIDR: "10.233.0.0/16"
+    clusterCIDR: "{{ kube_pods_subnet }}"
     clusters:
     - name: cluster
       cluster:
         certificate-authority: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-        server: https://127.0.0.1:6443
+        server: https://{{ loadbalancer_apiserver.address }}:{{ loadbalancer_apiserver.port }}
     users:
     - name: kube-router
       user:
@@ -63,7 +63,7 @@ spec:
         args:
         - "--run-router=true"
         - "--run-firewall=true"
-        - "--run-service-proxy=false"
+        - "--run-service-proxy=true"
         - "--kubeconfig=/var/lib/kube-router/kubeconfig"
         - "--v=3"
         securityContext:

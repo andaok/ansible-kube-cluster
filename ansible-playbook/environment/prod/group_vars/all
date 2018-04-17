@@ -1,0 +1,41 @@
+# global files location
+local_release_dir: /tmp/release
+
+# download variable
+skip_downloads: false
+etcd_version: v3.3.2
+kube_version: v1.9.6
+docker_version: 18.03.0
+docker_compose_version: 1.21.0
+kube_cni_version: v0.7.1
+
+# etcd require variables
+etcd_data_dir: "/var/lib/etcd"
+
+# docker require variables
+docker_data_root: "/data01/docker"
+
+# kubernetes cluster loadbalancer require variables
+nginx_conf_dir: "/etc/nginx"
+nginx_bind_address: "0.0.0.0"
+nginx_bind_port: 6443
+nginx_expose_port: 6443
+
+# kubernetes cluster require variables
+loadbalancer_apiserver:
+  address: 127.0.0.1
+  port: 6443
+
+kube_log_level: 0
+# when kube_proxy_enabled is true use calico network_plugin,othwise kube-router network_plugin
+# if your current plugin is not the same as the previous one, you must restart your node
+# if you haven't run any plugins before or the current plugin is the same as the previous one, you can skip to restart your node
+kube_proxy_enabled: true
+kube_service_cluster_ip: "10.254.0.1"
+kube_cluster_dns: "10.254.0.2"
+kube_service_cluster_ip_range: "10.254.0.0/16"
+kube_pods_subnet: "10.233.0.0/16"
+kube_apiserver_node_port_range: "30000-32000"
+
+kube_cgroup_driver: "cgroupfs"
+pod_infra_container_image: "gcr.io/google_containers/pause-amd64:3.0"
