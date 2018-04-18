@@ -25,7 +25,11 @@ data:
     - name: cluster
       cluster:
         certificate-authority: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+{% if loadbalancer_apiserver.domain is none %}
         server: https://{{ loadbalancer_apiserver.address }}:{{ loadbalancer_apiserver.port }}
+{% else %}
+        server: https://{{ loadbalancer_apiserver.domain }}:{{ loadbalancer_apiserver.port }}
+{% endif %}
     users:
     - name: kube-router
       user:

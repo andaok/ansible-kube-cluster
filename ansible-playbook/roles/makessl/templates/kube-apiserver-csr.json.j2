@@ -9,6 +9,9 @@
     "kubernetes.default.svc",
     "kubernetes.default.svc.cluster",
     "kubernetes.default.svc.cluster.local",
+{% if loadbalancer_apiserver.domain is not none %}
+    "{{ loadbalancer_apiserver.domain }}",
+{% endif %}
 {% for item in groups['k8s-master'] %}
 {% if not loop.last %}
     "{{ hostvars[item]['access_ip'] | default(hostvars[item]['ip'] | default(hostvars[item]['ansible_default_ipv4']['address']))}}",

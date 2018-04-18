@@ -28,6 +28,7 @@ loadbalancer_apiserver:
   port: 6443
 
 kube_log_level: 0
+
 # when kube_proxy_enabled is true use calico network_plugin,othwise kube-router network_plugin
 # if your current plugin is not the same as the previous one, you must restart your node
 # if you haven't run any plugins before or the current plugin is the same as the previous one, you can skip to restart your node

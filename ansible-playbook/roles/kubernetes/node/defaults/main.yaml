@@ -5,6 +5,7 @@ node_binary_dir: "{{ local_release_dir }}/kubenode/kubernetes/node/bin"
 cni_binary_dir: "{{ local_release_dir }}/cni"
 kube_bin_dir: "/usr/bin"
 loadbalancer_apiserver:
+  domain:
   address: 127.0.0.1
   port: 6443
 token_account: kubelet-bootstrap
@@ -28,7 +29,6 @@ kube_cni_conf_dir: "/etc/cni/net.d"
 kube_cni_bin_dir: "/opt/cni/bin"
 # kubernetes network plugin support calico and kube-router,if kube_proxy_enabled is true use calico ，otherwise kube-router
 kube_proxy_enabled: true
-pod_network_plugin: "calico"
 etcd_endpoints: |-
   {% for item in groups['etcd'] -%}
     https://{{ hostvars[item].access_ip | default(hostvars[item].ip | default(hostvars[item].ansible_default_ipv4['address'])) }}:2379{% if not loop.last %},{% endif %}
