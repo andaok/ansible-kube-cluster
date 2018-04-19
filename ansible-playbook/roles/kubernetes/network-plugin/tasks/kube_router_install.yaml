@@ -12,7 +12,7 @@
   with_items:
     - "{{ kube_certs_dir }}/kube-proxy.kubeconfig"
     - /usr/lib/systemd/system/kube-proxy.service
-    - /etc/cni/net.d
+    - /etc/cni/net.d/*
 
 - name: create yaml file require directory
   file:

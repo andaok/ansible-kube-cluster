@@ -1,0 +1,9 @@
+local_release_dir: "/tmp/release"
+yaml_dir: "{{ local_release_dir }}/yaml"
+certs_dir: "{{ local_release_dir }}/certs"
+kube_certs_dir: "/etc/kubernetes/ssl"
+kube_proxy_enabled: true
+etcd_endpoints: |-
+  {% for item in groups['etcd'] -%}
+    https://{{ hostvars[item].access_ip | default(hostvars[item].ip | default(hostvars[item].ansible_default_ipv4['address'])) }}:2379{% if not loop.last %},{% endif %}
+  {%- endfor %}

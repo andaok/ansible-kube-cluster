@@ -9,7 +9,7 @@
     path: "{{ item }}"
     state: absent
   with_items:
-    - /etc/cni/net.d/
+    - /etc/cni/net.d/*
 
 - name: create yaml file require directory
   file:

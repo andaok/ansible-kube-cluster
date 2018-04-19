@@ -1,0 +1,8 @@
+# install pod_network_plugin ,default is calico
+- name: install network_plugin | install calico
+  include_tasks: "calico_install.yaml"
+  when: kube_proxy_enabled
+
+- name: install network_plugin | install kube-router
+  include_tasks: "kube_router_install.yaml"
+  when: not kube_proxy_enabled
