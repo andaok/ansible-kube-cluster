@@ -1,11 +1,9 @@
 - hosts: all
-  remote_user: vagrant
   become: yes
   roles:
     - preinstall
 
 - hosts: k8s-console
-  remote_user: vagrant
   become: yes
   roles:
     - download
@@ -15,15 +13,15 @@
     - { role: kubernetes/client }
 
 - hosts: k8s-master
-  remote_user: vagrant
   become: yes
   roles:
     - etcd
     - { role: kubernetes/master }
-
+    - docker
+    - master-lb
+    - { role: kubernetes/node }
 
 - hosts: k8s-node
-  remote_user: vagrant
   become: yes
   roles:
     - docker

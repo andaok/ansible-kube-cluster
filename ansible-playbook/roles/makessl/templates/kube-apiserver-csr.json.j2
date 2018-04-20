@@ -9,7 +9,7 @@
     "kubernetes.default.svc",
     "kubernetes.default.svc.cluster",
     "kubernetes.default.svc.cluster.local",
-{% if loadbalancer_apiserver.domain is not none %}
+{% if loadbalancer_apiserver.domain is defined %}
     "{{ loadbalancer_apiserver.domain }}",
 {% endif %}
 {% for item in groups['k8s-master'] %}

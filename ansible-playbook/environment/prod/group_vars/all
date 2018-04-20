@@ -23,7 +23,7 @@ nginx_expose_port: 8443
 
 # kubernetes cluster require variables
 loadbalancer_apiserver:
-  domain: 
+  #domain: elb.somedomain.com
   address: 127.0.0.1
   port: 8443
 

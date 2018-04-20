@@ -25,7 +25,7 @@ data:
     - name: cluster
       cluster:
         certificate-authority: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-{% if loadbalancer_apiserver.domain is none %}
+{% if loadbalancer_apiserver.domain is not defined %}
         server: https://{{ loadbalancer_apiserver.address }}:{{ loadbalancer_apiserver.port }}
 {% else %}
         server: https://{{ loadbalancer_apiserver.domain }}:{{ loadbalancer_apiserver.port }}

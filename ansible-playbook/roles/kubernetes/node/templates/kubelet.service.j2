@@ -18,6 +18,11 @@ ExecStart={{ kube_bin_dir }}/kubelet \
   --cluster_domain={{ kube_cluster_domain }} \
   --hairpin-mode promiscuous-bridge \
   --allow-privileged=true \
+{% if ansible_hostname in groups['k8s-node'] %}
+  --node-labels=node-role.kubernetes.io/k8s-node=true \
+{% elif ansible_hostname in groups['k8s-master'] %}
+  --node-labels=node-role.kubernetes.io/k8s-master=true \
+{% endif %}
   --serialize-image-pulls=true \
   --max-pods=512 \
   --v={{ kube_log_level }} \

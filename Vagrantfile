@@ -2,15 +2,18 @@
 # vi: set ft=ruby :
 ENV["LC_ALL"] = "en_US.UTF-8"
 masters = {
-  "k8smaster1" => "192.168.1.10",
-  "k8smaster2" => "192.168.1.20",
-  "k8smaster3" => "192.168.1.30"
+  "k8smaster1" => "192.168.2.10",
+  "k8smaster2" => "192.168.2.20",
+  "k8smaster3" => "192.168.2.30"
 }
 
 nodes = {
-  "k8snode1" => "192.168.1.40",
-  "k8snode2" => "192.168.1.50",
-  "k8sconsole" => "192.168.1.100"
+  "k8snode1" => "192.168.2.40",
+  "k8snode2" => "192.168.2.50"
+}
+
+consoles = {
+  "k8sconsole" => "192.168.2.100"
 }
 
 Vagrant.configure("2") do |config|
@@ -24,7 +27,7 @@ Vagrant.configure("2") do |config|
       server.vm.network "private_network",ip: ip
       server.vm.provider "virtualbox" do |v|
         v.name = master
-        v.customize ["modifyvm",:id,"--memory", "1024"]
+        v.customize ["modifyvm",:id,"--memory", "2048"]
       end
     end
   end
@@ -40,4 +43,14 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  consoles.each do |console,ip|
+    config.vm.define console do |client|
+      client.vm.hostname = console
+      client.vm.network "private_network",ip: ip
+      client.vm.provider "virtualbox" do |v|
+        v.name = console
+        v.customize ["modifyvm",:id,"--memory","1024"]
+      end
+    end
+  end
 end
