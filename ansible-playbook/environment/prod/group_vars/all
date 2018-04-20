@@ -18,14 +18,14 @@ docker_data_root: "/data01/docker"
 # kubernetes cluster loadbalancer require variables
 nginx_conf_dir: "/etc/nginx"
 nginx_bind_address: "0.0.0.0"
-nginx_bind_port: 6443
-nginx_expose_port: 6443
+nginx_bind_port: 8443
+nginx_expose_port: 8443
 
 # kubernetes cluster require variables
 loadbalancer_apiserver:
-  domain: elb.somedomain.com
+  domain: 
   address: 127.0.0.1
-  port: 6443
+  port: 8443
 
 kube_log_level: 0
 
