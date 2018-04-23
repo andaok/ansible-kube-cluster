@@ -4,44 +4,18 @@
   ignore_errors: true
   run_once: yes
 
-- name: uninstall kube-router if exists
+- name: uninstall kube-router relationship files if exists
   file:
     path: "{{ item }}"
     state: absent
   with_items:
     - /etc/cni/net.d/*
 
-# - name: create yaml file require directory
-#   file:
-#     path: "{{ yaml_dir }}"
-#     state: directory
-#   delegate_to: "{{ groups['k8s-console'][0] }}"
-#
-# - name: gather certs for calico etcd endpoints
-#   slurp:
-#     src: "{{ item }}"
-#   register: calico_etcd_certs
-#   with_items:
-#     - "{{ certs_dir }}/ca.pem"
-#     - "{{ certs_dir }}/etcd.pem"
-#     - "{{ certs_dir }}/etcd-key.pem"
-#   delegate_to: "{{ groups['k8s-console'][0] }}"
-#
-# - name: Generate Deployment YAML
-#   template:
-#     src: "calico.yaml.j2"
-#     dest: "{{ yaml_dir }}/calico.yaml"
-#   delegate_to: "{{ groups['k8s-console'][0] }}"
-#
-# - name: create calico network_plugin
-#   shell: "kubectl apply -f {{ yaml_dir }}/calico.yaml"
-#   delegate_to: "{{ groups['k8s-console'][0] }}"
-#   run_once: yes
-
 - name: sync kube cni plugin binary to each node
   copy:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
+    mode: 0755
   with_items:
     - { src: "{{ cni_binary_dir }}/bridge", dest: "{{ kube_cni_bin_dir }}/" }
     - { src: "{{ cni_binary_dir }}/dhcp", dest: "{{ kube_cni_bin_dir }}/" }
@@ -57,6 +31,7 @@
     - { src: "{{ cni_binary_dir }}/tuning", dest: "{{ kube_cni_bin_dir }}/" }
     - { src: "{{ cni_binary_dir }}/vlan", dest: "{{ kube_cni_bin_dir }}/" }
 
+
 - name: sync calico require certs
   copy:
     src: "{{ item.src }}"
@@ -66,15 +41,15 @@
     - { src: "{{ certs_dir }}/etcd.pem", dest: "{{ kube_certs_dir }}/" }
     - { src: "{{ certs_dir }}/etcd-key.pem", dest: "{{ kube_certs_dir }}/" }
 
-- name: sync 10-calico.conf
-  with_items:
-    - cc: 10-calico.conf
-      d: /etc/cni/net.d
-  template:
-    src: "{{ item.cc }}.j2"
-    dest: "{{ item.d }}/{{ item.cc }}"
-    mode: 0644
-  when: (ansible_hostname in groups['k8s-node'])
+# - name: sync 10-calico.conf
+#   with_items:
+#     - cc: 10-calico.conflist
+#       d: /etc/cni/net.d
+#   template:
+#     src: "{{ item.cc }}.j2"
+#     dest: "{{ item.d }}/{{ item.cc }}"
+#     mode: 0644
+#   when: (ansible_hostname in groups['k8s-node'])
 
 - name: install calico-node service unit
   with_items:
@@ -102,3 +77,30 @@
     daemon_reload: yes
   with_items:
     - calico-node
+
+- name: create yaml file require directory
+  file:
+    path: "{{ yaml_dir }}"
+    state: directory
+  delegate_to: "{{ groups['k8s-console'][0] }}"
+
+- name: gather certs for calico etcd endpoints
+  slurp:
+    src: "{{ item }}"
+  register: calico_etcd_certs
+  with_items:
+    - "{{ certs_dir }}/ca.pem"
+    - "{{ certs_dir }}/etcd.pem"
+    - "{{ certs_dir }}/etcd-key.pem"
+  delegate_to: "{{ groups['k8s-console'][0] }}"
+
+- name: Generate Deployment YAML
+  template:
+    src: "calico.yaml.j2"
+    dest: "{{ yaml_dir }}/calico.yaml"
+  delegate_to: "{{ groups['k8s-console'][0] }}"
+
+- name: create calico network_plugin
+  shell: "kubectl apply -f {{ yaml_dir }}/calico.yaml"
+  delegate_to: "{{ groups['k8s-console'][0] }}"
+  run_once: yes

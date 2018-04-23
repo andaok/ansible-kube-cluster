@@ -5,7 +5,11 @@
   ignore_errors: true
   run_once: yes
 
-- name: uninstall kube-proxy if exists
+- name: uninstall kube-proxy
+  shell: systemctl stop kube-proxy
+  ignore_errors: true
+
+- name: remove kube proxy relationship files if exists
   file:
     path: "{{ item }}"
     state: absent
@@ -13,6 +17,7 @@
     - "{{ kube_certs_dir }}/kube-proxy.kubeconfig"
     - /usr/lib/systemd/system/kube-proxy.service
     - /etc/cni/net.d/*
+    - /usr/lib/systemd/system/calico-node.service
 
 - name: create yaml file require directory
   file:

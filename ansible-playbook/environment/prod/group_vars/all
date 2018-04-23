@@ -41,3 +41,6 @@ kube_apiserver_node_port_range: "30000-32000"
 
 kube_cgroup_driver: "cgroupfs"
 pod_infra_container_image: "gcr.io/google_containers/pause-amd64:3.0"
+
+
+calico_version: "v3.1.0"

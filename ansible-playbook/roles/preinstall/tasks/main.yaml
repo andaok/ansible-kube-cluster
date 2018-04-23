@@ -24,8 +24,12 @@
 
 - name: install ntpd
   yum:
-    name: ntp
+    name: "{{ item }}"
     state: latest
+  with_items:
+    - ntpd
+    - net-tools
+    - conntrack
 
 - name: Make sure ntpd started
   systemd:
