@@ -1,9 +1,20 @@
 local_release_dir: "/tmp/release"
 yaml_dir: "{{ local_release_dir }}/yaml"
 certs_dir: "{{ local_release_dir }}/certs"
+cni_binary_dir: "{{ local_release_dir }}/cni"
+kube_cni_conf_dir: "/etc/cni/net.d"
+kube_cni_bin_dir: "/opt/cni/bin"
 kube_certs_dir: "/etc/kubernetes/ssl"
 kube_proxy_enabled: true
 etcd_endpoints: |-
   {% for item in groups['etcd'] -%}
     https://{{ hostvars[item].access_ip | default(hostvars[item].ip | default(hostvars[item].ansible_default_ipv4['address'])) }}:2379{% if not loop.last %},{% endif %}
   {%- endfor %}
+
+calico_version: "v3.1.0"
+calico_as: ""
+calico_ip6: ""
+calico_libnetwork_enabled: "true"
+kube_pods_subnet: "10.233.0.0/16"
+calico_ipv4pool_ipip: "always"
+calico_networking_backend: "bird"

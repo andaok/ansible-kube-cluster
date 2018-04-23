@@ -1,23 +1,4 @@
 # install kubelet
-- name: sync kube cni plugin binary to each node
-  copy:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
-  with_items:
-    - { src: "{{ cni_binary_dir }}/bridge", dest: "{{ kube_cni_bin_dir }}/" }
-    - { src: "{{ cni_binary_dir }}/dhcp", dest: "{{ kube_cni_bin_dir }}/" }
-    - { src: "{{ cni_binary_dir }}/flannel", dest: "{{ kube_cni_bin_dir }}/" }
-    - { src: "{{ cni_binary_dir }}/host-device", dest: "{{ kube_cni_bin_dir }}/" }
-    - { src: "{{ cni_binary_dir }}/host-local", dest: "{{ kube_cni_bin_dir }}/" }
-    - { src: "{{ cni_binary_dir }}/ipvlan", dest: "{{ kube_cni_bin_dir }}/" }
-    - { src: "{{ cni_binary_dir }}/loopback", dest: "{{ kube_cni_bin_dir }}/" }
-    - { src: "{{ cni_binary_dir }}/macvlan", dest: "{{ kube_cni_bin_dir }}/" }
-    - { src: "{{ cni_binary_dir }}/portmap", dest: "{{ kube_cni_bin_dir }}/" }
-    - { src: "{{ cni_binary_dir }}/ptp", dest: "{{ kube_cni_bin_dir }}/" }
-    - { src: "{{ cni_binary_dir }}/sample", dest: "{{ kube_cni_bin_dir }}/" }
-    - { src: "{{ cni_binary_dir }}/tuning", dest: "{{ kube_cni_bin_dir }}/" }
-    - { src: "{{ cni_binary_dir }}/vlan", dest: "{{ kube_cni_bin_dir }}/" }
-
 - name: create kubelet-bootstrap user
   command: kubectl create clusterrolebinding kubelet-bootstrap --clusterrole=system:node-bootstrapper --user=kubelet-bootstrap
   ignore_errors: yes
