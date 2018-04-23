@@ -16,10 +16,9 @@
   become: yes
   roles:
     - etcd
-    - { role: kubernetes/master }
     - docker
-    - master-lb
-    - { role: kubernetes/node }
+    - { role: kubernetes/master }
+    - { role: kubernetes/network_plugin }
 
 - hosts: k8s-node
   become: yes
