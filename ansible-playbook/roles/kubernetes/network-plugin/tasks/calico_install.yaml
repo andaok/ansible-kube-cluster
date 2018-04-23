@@ -64,7 +64,7 @@
   with_items:
     - { src: "{{ certs_dir }}/ca.pem", dest: "{{ kube_certs_dir }}/" }
     - { src: "{{ certs_dir }}/etcd.pem", dest: "{{ kube_certs_dir }}/" }
-    - { src: "{{ certs_dir }}/etcd-key.pem", dest: "{{ kube_certs_dir }}/"}
+    - { src: "{{ certs_dir }}/etcd-key.pem", dest: "{{ kube_certs_dir }}/" }
 
 - name: sync 10-calico.conf
   with_items:

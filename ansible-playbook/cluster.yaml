@@ -18,7 +18,7 @@
     - etcd
     - docker
     - { role: kubernetes/master }
-    - { role: kubernetes/network_plugin }
+    - { role: kubernetes/network-plugin }
 
 - hosts: k8s-node
   become: yes
