@@ -27,7 +27,7 @@
     name: "{{ item }}"
     state: latest
   with_items:
-    - ntpd
+    - ntp
     - net-tools
     - conntrack
 
