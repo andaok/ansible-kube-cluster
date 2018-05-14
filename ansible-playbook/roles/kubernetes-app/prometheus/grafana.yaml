@@ -2,7 +2,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: prometheus-monitoring-grafana
-  namespace: monitoring
+  namespace: kube-system
 spec:
   replicas: 1
   template:
@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: grafana
-        image: grafana/grafana:latest 
+        image: grafana/grafana:latest
         ports:
         - containerPort: 3000
           protocol: TCP
@@ -27,7 +27,7 @@ spec:
 #        - name: GF_INSTALL_PLUGINS
 #          value: kubernetes-app
         - name: INFLUXDB_HOST
-          value: prometheus 
+          value: prometheus
         - name: GF_SERVER_HTTP_PORT
           value: "3000"
         - name: GF_AUTH_BASIC_ENABLED
@@ -52,7 +52,7 @@ metadata:
     kubernetes.io/cluster-service: 'true'
     kubernetes.io/name: monitoring-grafana
   name: prometheus-monitoring-grafana
-  namespace: monitoring
+  namespace: kube-system
 spec:
   ports:
   - port: 80

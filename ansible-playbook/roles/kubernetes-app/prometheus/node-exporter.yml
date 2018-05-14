@@ -3,7 +3,7 @@ apiVersion: extensions/v1beta1
 kind: DaemonSet
 metadata:
   name: node-exporter
-  namespace: monitoring
+  namespace: kube-system
   labels:
     k8s-app: node-exporter
 spec:
@@ -29,7 +29,7 @@ metadata:
   labels:
     k8s-app: node-exporter
   name: node-exporter
-  namespace: monitoring
+  namespace: kube-system
 spec:
   ports:
   - name: http

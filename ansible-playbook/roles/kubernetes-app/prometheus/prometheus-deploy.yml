@@ -5,7 +5,7 @@ metadata:
   labels:
     name: prometheus-deployment
   name: prometheus
-  namespace: monitoring
+  namespace: kube-system
 spec:
   replicas: 1
   selector:
@@ -41,11 +41,25 @@ spec:
             cpu: 500m
             memory: 2500Mi
       serviceAccountName: prometheus
-      imagePullSecrets: 
+      imagePullSecrets:
         - name: regsecret
       volumes:
       - name: data
         emptyDir: {}
       - name: config-volume
         configMap:
-          name: prometheus-config   
+          name: prometheus-config
+---
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    app: prometheus
+  name: prometheus
+  namespace: kube-system
+spec:
+  ports:
+  - port: 9090
+    targetPort: 9090
+  selector:
+    app: prometheus
