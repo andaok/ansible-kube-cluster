@@ -23,7 +23,8 @@ spec:
       terminationGracePeriodSeconds: 60
       hostNetwork: true
       containers:
-      - image: traefik
+      # - image: traefik
+      - image: ldez/traefik:webui
         name: traefik-ingress-lb
         ports:
         - name: http
@@ -55,4 +56,5 @@ spec:
     - protocol: TCP
       port: 8080
       name: admin
+      targetPort: 8080
 #  type: NodePort
