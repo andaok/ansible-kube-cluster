@@ -25,6 +25,9 @@ spec:
         - "--config.file=/etc/prometheus/prometheus.yml"
         - "--storage.tsdb.path=/prometheus"
         - "--storage.tsdb.retention=24h"
+        # this add by chenglanguo
+        - "--web.external-url=http://k8s.com/prometheus/"
+        - "--web.route-prefix=/"
         ports:
         - containerPort: 9090
           protocol: TCP
