@@ -190,3 +190,10 @@ data:
         regex: 'kubernetes-(.*)'
         replacement: '${1}'
         target_label: name
+
+    - job_name: 'app-targets'
+      metrics_path: '/metrics'
+      # if setup support prometheus scrape from app
+      static_configs:
+      - targets:
+        - 'prometheus.default:9090'
