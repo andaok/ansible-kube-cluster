@@ -2,12 +2,13 @@
 local_release_dir: /tmp/release
 
 # download variable
-skip_downloads: false
-etcd_version: v3.3.2
-kube_version: v1.9.6
+skip_downloads: true
+skip_gencerts: true
+etcd_version: v3.3.8
+kube_version: v1.9.9
 docker_version: 18.03.0
-docker_compose_version: 1.21.0
-kube_cni_version: v0.7.1
+docker_compose_version: 1.21.2
+kube_cni_version: v0.6.0
 
 # etcd require variables
 etcd_data_dir: "/var/lib/etcd"

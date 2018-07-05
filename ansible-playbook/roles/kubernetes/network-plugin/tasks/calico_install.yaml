@@ -11,27 +11,6 @@
   with_items:
     - /etc/cni/net.d/*
 
-- name: sync kube cni plugin binary to each node
-  copy:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
-    mode: 0755
-  with_items:
-    - { src: "{{ cni_binary_dir }}/bridge", dest: "{{ kube_cni_bin_dir }}/" }
-    - { src: "{{ cni_binary_dir }}/dhcp", dest: "{{ kube_cni_bin_dir }}/" }
-    - { src: "{{ cni_binary_dir }}/flannel", dest: "{{ kube_cni_bin_dir }}/" }
-    - { src: "{{ cni_binary_dir }}/host-device", dest: "{{ kube_cni_bin_dir }}/" }
-    - { src: "{{ cni_binary_dir }}/host-local", dest: "{{ kube_cni_bin_dir }}/" }
-    - { src: "{{ cni_binary_dir }}/ipvlan", dest: "{{ kube_cni_bin_dir }}/" }
-    - { src: "{{ cni_binary_dir }}/loopback", dest: "{{ kube_cni_bin_dir }}/" }
-    - { src: "{{ cni_binary_dir }}/macvlan", dest: "{{ kube_cni_bin_dir }}/" }
-    - { src: "{{ cni_binary_dir }}/portmap", dest: "{{ kube_cni_bin_dir }}/" }
-    - { src: "{{ cni_binary_dir }}/ptp", dest: "{{ kube_cni_bin_dir }}/" }
-    - { src: "{{ cni_binary_dir }}/sample", dest: "{{ kube_cni_bin_dir }}/" }
-    - { src: "{{ cni_binary_dir }}/tuning", dest: "{{ kube_cni_bin_dir }}/" }
-    - { src: "{{ cni_binary_dir }}/vlan", dest: "{{ kube_cni_bin_dir }}/" }
-
-
 - name: sync calico require certs
   copy:
     src: "{{ item.src }}"
@@ -40,16 +19,8 @@
     - { src: "{{ certs_dir }}/ca.pem", dest: "{{ kube_certs_dir }}/" }
     - { src: "{{ certs_dir }}/etcd.pem", dest: "{{ kube_certs_dir }}/" }
     - { src: "{{ certs_dir }}/etcd-key.pem", dest: "{{ kube_certs_dir }}/" }
-
-# - name: sync 10-calico.conf
-#   with_items:
-#     - cc: 10-calico.conflist
-#       d: /etc/cni/net.d
-#   template:
-#     src: "{{ item.cc }}.j2"
-#     dest: "{{ item.d }}/{{ item.cc }}"
-#     mode: 0644
-#   when: (ansible_hostname in groups['k8s-node'])
+  when:
+    - not skip_gencerts|default(false)
 
 - name: install calico-node service unit
   with_items:

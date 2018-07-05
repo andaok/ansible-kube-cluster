@@ -6,7 +6,7 @@
     - "{{ certs_dir }}/ca.pem"
     - "{{ certs_dir }}/kube-admin.pem"
     - "{{ certs_dir }}/kube-admin-key.pem"
-
+    
 - name: write admin kubeconfig
   template:
     src: admin.conf.j2
