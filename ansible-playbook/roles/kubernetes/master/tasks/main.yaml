@@ -27,9 +27,7 @@
     - { src: "{{ certs_dir }}/etcd.pem", dest: "{{ kube_certs_dir }}/" }
     - { src: "{{ certs_dir }}/etcd-key.pem", dest: "{{ kube_certs_dir }}/" }
     - { src: "{{ certs_dir }}/token.csv", dest: "{{ kube_token_dir }}/token.csv" }
-  when:
-    - not skip_gencerts|default(false)
-    
+
 - name: sync kube master binary file
   copy:
     src: "{{ item.src }}"

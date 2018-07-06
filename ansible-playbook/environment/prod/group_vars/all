@@ -3,7 +3,6 @@ local_release_dir: /tmp/release
 
 # download variable
 skip_downloads: true
-skip_gencerts: true
 etcd_version: v3.3.8
 kube_version: v1.9.9
 docker_version: 18.03.0

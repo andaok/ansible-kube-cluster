@@ -16,8 +16,6 @@
     - { src: "{{ certs_dir }}/ca-key.pem", dest: "{{ etcd_certs_dir }}/" }
     - { src: "{{ certs_dir }}/etcd.pem", dest: "{{ etcd_certs_dir }}/" }
     - { src: "{{ certs_dir }}/etcd-key.pem", dest: "{{ etcd_certs_dir }}/" }
-  when:
-    - not skip_gencerts|default(false)
 
 - name: sync etcd binary file
   copy:

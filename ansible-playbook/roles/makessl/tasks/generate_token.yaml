@@ -10,3 +10,6 @@
   environment:
     TOKEN_DIR: "{{ certs_dir }}"
   run_once: yes
+  args:
+    chdir: "{{ certs_dir }}"
+    creates: "{{ certs_dir }}/token.csv"

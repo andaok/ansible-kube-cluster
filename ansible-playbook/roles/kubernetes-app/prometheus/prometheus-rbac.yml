@@ -22,6 +22,8 @@ rules:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
+  labels:
+    app: prometheus
   name: prometheus
   namespace: kube-system
 ---

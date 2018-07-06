@@ -19,8 +19,6 @@
     - { src: "{{ certs_dir }}/ca.pem", dest: "{{ kube_certs_dir }}/" }
     - { src: "{{ certs_dir }}/etcd.pem", dest: "{{ kube_certs_dir }}/" }
     - { src: "{{ certs_dir }}/etcd-key.pem", dest: "{{ kube_certs_dir }}/" }
-  when:
-    - not skip_gencerts|default(false)
 
 - name: install calico-node service unit
   with_items:

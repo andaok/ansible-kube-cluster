@@ -31,10 +31,6 @@
     group: "{{ kube_user }}"
   with_items:
     - "{{ kube_certs_dir }}"
-    - "{{ kubelet_working_dir }}"
-    - "{{ kube_cni_conf_dir }}"
-    - "{{ kube_cni_bin_dir }}"
-    - "{{ kube_proxy_working_dir }}"
 
 - name: sync bootstrap.kubeconfig to each node
   copy:

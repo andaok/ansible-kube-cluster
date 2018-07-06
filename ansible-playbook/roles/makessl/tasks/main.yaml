@@ -1,15 +1,9 @@
 ---
 - name: Generate certs | generate cert json file
   include_tasks: "generate_cert_json.yaml"
-  when:
-    - not skip_gencerts|default(false)
 
 - name: Generate certs | generate certs
   include_tasks: "generate_cert.yaml"
-  when:
-    - not skip_gencerts|default(false)
 
 - name: Generate token
   include_tasks: "generate_token.yaml"
-  when:
-    - not skip_gencerts|default(false)

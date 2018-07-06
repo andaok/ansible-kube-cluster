@@ -4,7 +4,6 @@ After=docker.service
 Requires=docker.service
 
 [Service]
-WorkingDirectory={{ kubelet_working_dir }}
 ExecStart={{ kube_bin_dir }}/kubelet \
   --cgroup-driver={{ kube_cgroup_driver }} \
   --fail-swap-on=false \

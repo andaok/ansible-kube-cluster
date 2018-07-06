@@ -3,7 +3,6 @@ Description=Kubernetes Kube-Proxy Server
 After=network.target
 
 [Service]
-WorkingDirectory={{ kube_proxy_working_dir }}
 ExecStart={{ kube_bin_dir }}/kube-proxy \
   --bind-address={{ ip | default(ansible_default_ipv4.address) }} \
   --hostname-override={{ ansible_hostname }} \
