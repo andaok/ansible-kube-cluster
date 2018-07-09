@@ -1,5 +1,7 @@
 # ansible-kube-cluster
 
+**前提：你的deploybox能够连接Google等国外的网站，否则的话，这些对应的二进制包和images没法下载下来，当然，你可以尝试一下，毕竟我没有在没法连接外网的情况下测试过，手动笑脸**
+
 ```bash
 cd ansible-playbook
 ansible-playbook -i environment/prod/inventory  cluster.yaml
