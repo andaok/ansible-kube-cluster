@@ -30,4 +30,43 @@ kube_cni_version: v0.6.0
 
 > 第二次部署，一般来说，是版本更新，或者说证书更新，这时候如果是版本更新，那么你只需要修改对于的版本参数，然后重新部署即可；如果是证书更新，那么你需要将`/tmp/release/certs`下的证书都删掉之后，重新deploy，才会生成新的证书。
 
-如果是证书更新操作，在ansible脚本跑完之后，我们可能需要删除掉/var/lib/etcd下的内容，否则，就会报错说没法配置网络，认证错误，我也不知道为啥，正在查这个问题，不过有一句说一句，证书的期限是10年，讲道理，10年之后，也许有新的产品出来了，所以更新证书这个操作有点扯啊
+如果是证书更新操作，证书更新之后，我们需要将服务组件重启，并且重新创建对应的serviceaccount，然后将对应的服务的pods进行delete，使其重新创建，大致步骤如下：
+
+
+重启所有组件
+
+```bash
+# on master
+systemctl restart kube-apiserver kube-controller-manager kube-scheduler
+
+# on node
+rm -rf /etc/kubernetes/ssl/kubelet*
+systemctl restart kubelet kube-proxy
+```
+
+删除所有相关的sa
+
+```bash
+kubectl delete sa --all -n kube-system
+```
+
+重新创建除了默认sa之外的所有sa
+
+```bash
+kubectl apply -f sa.yaml
+```
+
+删除所有相关的pod
+
+```bash
+kubectl delete pods --all -n kube-system
+```
+
+接着，你就会发现，你的所有业务都正常了
+
+```bash
+kubectl get pods --all-namespaces
+```
+
+
+**PS：一般来说，咱们的自签名证书都是10年起，10年之后，咱们还用不用k8s这个技术都难说，所以一般证书更新的操作基本上是不会有的**
