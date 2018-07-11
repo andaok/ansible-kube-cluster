@@ -1,0 +1,17 @@
+{
+  "CN": "devadmin",
+  "hosts": [ ],
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "CN",
+      "ST": "Wuhan",
+      "L": "Hubei",
+      "O": "k8s",
+      "OU": "System"
+    }
+  ]
+}
