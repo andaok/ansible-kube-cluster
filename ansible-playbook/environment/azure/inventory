@@ -1,40 +1,40 @@
 [all]
-k8smaster1 ansible_host=10.0.2.17 ip=10.0.2.17
-k8smaster2 ansible_host=10.0.2.18 ip=10.0.2.18
-k8smaster3 ansible_host=10.0.2.19 ip=10.0.2.19
-k8snode1 ansible_host=10.0.2.20 ip=10.0.2.20
-k8snode2 ansible_host=10.0.2.21 ip=10.0.2.21
-k8snode3 ansible_host=10.0.2.22 ip=10.0.2.22
-k8snode4 ansible_host=10.0.2.23 ip=10.0.2.23
-k8snode5 ansible_host=10.0.2.24 ip=10.0.2.24
-k8snode6 ansible_host=10.0.2.25 ip=10.0.2.25
-k8sconsole ansible_host=10.0.2.16 ip=10.0.2.16
+fs-k8smaster1 ansible_host=10.0.2.26 ip=10.0.2.26
+fs-k8smaster2 ansible_host=10.0.2.27 ip=10.0.2.27
+fs-k8smaster3 ansible_host=10.0.2.28 ip=10.0.2.28
+fs-k8snode1 ansible_host=10.0.2.30 ip=10.0.2.30
+fs-k8snode2 ansible_host=10.0.2.31 ip=10.0.2.31
+fs-k8snode3 ansible_host=10.0.2.32 ip=10.0.2.32
+fs-k8snode4 ansible_host=10.0.2.33 ip=10.0.2.33
+fs-k8snode5 ansible_host=10.0.2.34 ip=10.0.2.34
+fs-k8snode6 ansible_host=10.0.2.29 ip=10.0.2.29
+fleetshop-k8s-sconsole ansible_host=10.0.2.16 ip=10.0.2.16
 
 [k8s-console]
-k8sconsole
+fleetshop-k8s-sconsole
 
 [k8s-master]
-k8smaster1
-k8smaster2
-k8smaster3
+fs-k8smaster1
+fs-k8smaster2
+fs-k8smaster3
 
 [k8s-node]
-k8snode1
-k8snode2
-k8snode3
-k8snode4
-k8snode5
-k8snode6
+fs-k8snode1
+fs-k8snode2
+fs-k8snode3
+fs-k8snode4
+fs-k8snode5
+fs-k8snode6
 
 [k8s-master-lb]
-k8snode1
-k8snode2
-k8snode3
-k8snode4
-k8snode5
-k8snode6
+fs-k8snode1
+fs-k8snode2
+fs-k8snode3
+fs-k8snode4
+fs-k8snode5
+fs-k8snode6
 
 [etcd]
-k8smaster1
-k8smaster2
-k8smaster3
+fs-k8smaster1
+fs-k8smaster2
+fs-k8smaster3
