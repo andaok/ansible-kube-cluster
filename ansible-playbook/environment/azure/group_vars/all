@@ -2,7 +2,7 @@
 local_release_dir: /tmp/release
 
 # download variable
-skip_downloads: false 
+skip_downloads: false
 etcd_version: v3.3.8
 kube_version: v1.9.9
 docker_version: 18.03.0
@@ -10,10 +10,10 @@ docker_compose_version: 1.21.2
 kube_cni_version: v0.6.0
 
 # etcd require variables
-etcd_data_dir: "/var/lib/etcd"
+etcd_data_dir: "/data/etcd"
 
 # docker require variables
-docker_data_root: "/data01/docker"
+docker_data_root: "/data/docker"
 
 # kubernetes cluster loadbalancer require variables
 nginx_conf_dir: "/etc/nginx"
