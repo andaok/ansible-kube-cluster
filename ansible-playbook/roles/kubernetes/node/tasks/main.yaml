@@ -18,7 +18,7 @@
     src: bootstrap.kubeconfig.j2
     dest: "{{ certs_dir }}/bootstrap.kubeconfig"
     owner: root
-    mode: 0640
+    mode: 0755
   delegate_to: "{{ groups['k8s-console'][0] }}"
 
 - name: create kube node require dir
@@ -87,7 +87,7 @@
     src: kube-proxy.kubeconfig.j2
     dest: "{{ certs_dir }}/kube-proxy.kubeconfig"
     owner: root
-    mode: 0640
+    mode: 0755
   delegate_to: "{{ groups['k8s-console'][0] }}"
   when: kube_proxy_enabled
 

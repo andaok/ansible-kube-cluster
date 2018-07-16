@@ -1,14 +1,14 @@
 [all]
-fs-k8smaster1 ansible_host=10.0.2.26 ip=10.0.2.26
-fs-k8smaster2 ansible_host=10.0.2.27 ip=10.0.2.27
-fs-k8smaster3 ansible_host=10.0.2.28 ip=10.0.2.28
-fs-k8snode1 ansible_host=10.0.2.30 ip=10.0.2.30
-fs-k8snode2 ansible_host=10.0.2.31 ip=10.0.2.31
-fs-k8snode3 ansible_host=10.0.2.32 ip=10.0.2.32
-fs-k8snode4 ansible_host=10.0.2.33 ip=10.0.2.33
-fs-k8snode5 ansible_host=10.0.2.34 ip=10.0.2.34
-fs-k8snode6 ansible_host=10.0.2.29 ip=10.0.2.29
-fleetshop-k8s-sconsole ansible_host=10.0.2.16 ip=10.0.2.16
+fs-k8smaster1 ansible_host=10.0.2.26 ip=10.0.2.26 ansible_sudo_pass=Twopenwindow@123!
+fs-k8smaster2 ansible_host=10.0.2.27 ip=10.0.2.27 ansible_sudo_pass=Twopenwindow@123!
+fs-k8smaster3 ansible_host=10.0.2.28 ip=10.0.2.28 ansible_sudo_pass=Twopenwindow@123!
+fs-k8snode1 ansible_host=10.0.2.30 ip=10.0.2.30 ansible_sudo_pass=Twopenwindow@123!
+fs-k8snode2 ansible_host=10.0.2.31 ip=10.0.2.31 ansible_sudo_pass=Twopenwindow@123!
+fs-k8snode3 ansible_host=10.0.2.32 ip=10.0.2.32 ansible_sudo_pass=Twopenwindow@123!
+fs-k8snode4 ansible_host=10.0.2.33 ip=10.0.2.33 ansible_sudo_pass=Twopenwindow@123!
+fs-k8snode5 ansible_host=10.0.2.34 ip=10.0.2.34 ansible_sudo_pass=Twopenwindow@123!
+fs-k8snode6 ansible_host=10.0.2.29 ip=10.0.2.29 ansible_sudo_pass=Twopenwindow@123!
+fleetshop-k8s-sconsole ansible_host=10.0.2.16 ip=10.0.2.16 ansible_sudo_pass=Twopenwindow@123!
 
 [k8s-console]
 fleetshop-k8s-sconsole
