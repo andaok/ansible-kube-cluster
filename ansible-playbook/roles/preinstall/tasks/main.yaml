@@ -40,7 +40,7 @@
 - name: Add etcd user
   user:
     name: etcd
-    home: /var/lib/etcd
+    home: "{{ etcd_data_dir }}"
     comment: "Etcd user"
     system: yes
     shell: /sbin/nologin
