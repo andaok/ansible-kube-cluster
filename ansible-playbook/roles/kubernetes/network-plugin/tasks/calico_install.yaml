@@ -3,13 +3,13 @@
   delegate_to: "{{ groups['k8s-console'][0] }}"
   ignore_errors: true
   run_once: yes
-
+  
 - name: uninstall kube-router relationship files if exists
   file:
     path: "{{ item }}"
     state: absent
   with_items:
-    - /etc/cni/net.d/*
+    - /etc/cni/net.d
 
 - name: sync calico require certs
   copy:

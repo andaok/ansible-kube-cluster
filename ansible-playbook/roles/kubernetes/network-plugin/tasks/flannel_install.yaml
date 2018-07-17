@@ -9,7 +9,7 @@
     path: "{{ item }}"
     state: absent
   with_items:
-    - /etc/cni/net.d/*
+    - /etc/cni
     - /usr/lib/systemd/system/calico-node.service
 
 - name: create network plugin require dir
@@ -44,7 +44,7 @@
     dest: "{{ yaml_dir }}/flannel.yaml"
   delegate_to: "{{ groups['k8s-console'][0] }}"
 
-- name: create calico network_plugin
+- name: create flannel network_plugin
   shell: "kubectl apply -f {{ yaml_dir }}/flannel.yaml"
   delegate_to: "{{ groups['k8s-console'][0] }}"
   run_once: yes
