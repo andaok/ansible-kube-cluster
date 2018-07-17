@@ -1,14 +1,12 @@
-- name: delete calico network_plugin
-  shell: "kubectl delete -f {{ yaml_dir }}/calico.yaml"
+- name: delete flannel network_plugin
+  shell: "kubectl delete -f {{ yaml_dir }}/{{ item }}"
   delegate_to: "{{ groups['k8s-console'][0] }}"
   ignore_errors: true
   run_once: yes
-
-- name: delete kube-router network_plugin
-  shell: "kubectl delete -f {{ yaml_dir }}/kube-router.yaml"
-  delegate_to: "{{ groups['k8s-console'][0] }}"
-  ignore_errors: true
-  run_once: yes
+  with_items:
+    - flannel.yaml
+    - calico.yaml
+    - kube-router.yaml
 
 - name: uninstall other network plugin relationship files if exists
   file:
