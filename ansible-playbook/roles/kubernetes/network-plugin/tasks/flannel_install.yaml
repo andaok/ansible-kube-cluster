@@ -4,6 +4,13 @@
   ignore_errors: true
   run_once: yes
 
+
+- name: delete calico network_plugin if exists
+  shell: "kubectl delete -f {{ yaml_dir }}/calico.yaml"
+  delegate_to: "{{ groups['k8s-console'][0] }}"
+  ignore_errors: true
+  run_once: yes
+
 - name: uninstall other network plugin relationship files if exists
   file:
     path: "{{ item }}"
