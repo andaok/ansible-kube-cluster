@@ -1,7 +1,7 @@
 # install pod_network_plugin ,default is calico
 - name: install network_plugin | install calico
   include_tasks: "calico_install.yaml"
-  when: kube_proxy_enabled and network_plugin is calico
+  when: kube_proxy_enabled and network_plugin == "calico"
 
 - name: install network_plugin | install kube-router
   include_tasks: "kube_router_install.yaml"
@@ -10,4 +10,4 @@
 
 - name: install network_plugin | install flannel
   include_tasks: "flannel_install.yaml"
-  when: kube_proxy_enabled and network_plugin is flannel
+  when: kube_proxy_enabled and network_plugin == "flannel"

@@ -73,7 +73,7 @@ data:
     }
   net-conf.json: |
     {
-      "Network": "10.233.0.0/16",
+      "Network": "{{ kube_pods_subnet }}",
       "Backend": {
         "Type": "vxlan"
       }
@@ -104,7 +104,7 @@ spec:
       serviceAccountName: flannel
       initContainers:
       - name: install-cni
-        image: quay.io/coreos/flannel:v0.10.0-amd64
+        image: quay.io/coreos/flannel:{{ flannel_version }}
         command:
         - cp
         args:

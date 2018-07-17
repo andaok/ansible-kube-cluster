@@ -45,3 +45,4 @@ pod_infra_container_image: "gcr.io/google_containers/pause-amd64:3.0"
 
 
 calico_version: "v3.1.0"
+flannel_version: "v0.10.0-amd64"
