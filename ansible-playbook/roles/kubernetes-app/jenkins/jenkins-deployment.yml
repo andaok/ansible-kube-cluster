@@ -1,0 +1,105 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: jenkins
+  namespace: jenkins
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: jenkins-master
+    spec:
+     # securityContext:
+     #   runAsUser: 1000
+     #   fsGroup: 1000
+      serviceAccountName: jenkins-admin
+      containers:
+      - name: master
+        image: jenkins/jenkins:lts
+        ports:
+        - containerPort: 8080
+        - containerPort: 50000
+        readinessProbe:
+          httpGet:
+            path: /jenkins/login
+            port: 8080
+          periodSeconds: 10
+          timeoutSeconds: 5
+          successThreshold: 2
+          failureThreshold: 5
+        env:
+        - name: JAVA_OPTS
+          value: '-Xmx1400m'
+        - name: JENKINS_OPTS
+          value: "--prefix=/jenkins"
+        volumeMounts:
+        - mountPath: /var/jenkins_home
+          name: jenkins-home
+        - mountPath: /var/run/docker.sock
+          name: docker
+        resources:
+          limits:
+            cpu: 500m
+            memory: 1500Mi
+          requests:
+            cpu: 500m
+            memory: 1500Mi
+      nodeSelector:
+        role: jenkins
+      volumes:
+      - name: jenkins-home
+        hostPath:
+          path: /data/jenkins_home
+      - name: docker
+        hostPath:
+          path: /var/run/docker.sock
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    app: jenkins-master
+  name: jenkins-service
+  namespace: jenkins
+spec:
+  ports:
+    - port: 8080
+      name: jenkins
+    - port: 50000
+      name: agent
+  selector:
+    app: jenkins-master
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    k8s-app: jenkins
+  name: jenkins-admin
+  namespace: jenkins
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: jenkins-default
+rules:
+- apiGroups: ["","extensions","app"]
+  resources: ["pods","pods/exec","deployments","replicasets"]
+  verbs: ["get","list","watch","create","update","patch","delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: jenkins-admin
+  labels:
+    k8s-app: jenkins
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: jenkins-default
+subjects:
+- kind: ServiceAccount
+  name: jenkins-admin
+  namespace: jenkins
