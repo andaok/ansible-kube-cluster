@@ -19,7 +19,8 @@ spec:
           name: influxdb-storage
       volumes:
       - name: influxdb-storage
-        emptyDir: {}
+        hostPath:
+          path: /data/influxdb-data
 ---
 apiVersion: v1
 kind: Service

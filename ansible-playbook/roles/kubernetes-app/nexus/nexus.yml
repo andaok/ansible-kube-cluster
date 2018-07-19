@@ -1,0 +1,55 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: nexus
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: nexus
+  namespace: nexus
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nexus
+    spec:
+      containers:
+      - image: sonatype/nexus3
+        imagePullPolicy: IfNotPresent
+        name: nexus
+        env:
+        - name: NEXUS_CONTEXT
+          value: nexus
+        ports:
+        - containerPort: 8081
+        - containerPort: 5000
+        volumeMounts:
+          - mountPath: /nexus-data
+            name: nexus-data-volume
+      nodeSelector:
+        role: nexus
+      volumes:
+        - name: nexus-data-volume
+          hostPath:
+            path: /data/nexus-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nexus-service
+  namespace: nexus
+spec:
+  ports:
+  - port: 80
+    targetPort: 8081
+    protocol: TCP
+    name: http
+  - port: 5000
+    targetPort: 5000
+    protocol: TCP
+    name: docker
+  selector:
+    app: nexus

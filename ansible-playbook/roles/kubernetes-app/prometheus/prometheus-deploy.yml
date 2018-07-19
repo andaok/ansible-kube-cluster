@@ -48,7 +48,8 @@ spec:
         - name: regsecret
       volumes:
       - name: data
-        emptyDir: {}
+        hostPath:
+          path: /data/prometheus-data
       - name: config-volume
         configMap:
           name: prometheus-config
